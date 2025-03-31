@@ -10,3 +10,8 @@ module.exports.register = (req, res) => {
       pageTitle:"Đăng Ký"
     })
   }
+module.exports.forgotPassword = (req, res) => {
+  res.render("Admin/pages/forgot-password",{
+    pageTitle:"Quên Mật Khẩu"
+  })
+}
