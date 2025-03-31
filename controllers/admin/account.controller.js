@@ -3,3 +3,10 @@ module.exports.login = (req, res) => {
       pageTitle:"Đăng Nhập"
     })
   }
+
+
+module.exports.register = (req, res) => {
+    res.render("Admin/pages/register",{
+      pageTitle:"Đăng Ký"
+    })
+  }
