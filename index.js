@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname,"public")))
 app.locals.pathAdmin = variableConfig.pathAdmin;
 
 //thiết lập đường dẫn
-app.use(`/${variableConfig}`, adminRoutes);
+app.use(`/${variableConfig.pathAdmin}`, adminRoutes);
 app.use('/', clientRoutes);
 
 app.listen(port, () => {
