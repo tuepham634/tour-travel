@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path')
-require('dotenv').config()
-
+require('dotenv').config() //dùng để load các biến môi trường từ file .env vào process.env.
 
 const clientRoutes = require('./routes/client/index.route');
 const app = express()
