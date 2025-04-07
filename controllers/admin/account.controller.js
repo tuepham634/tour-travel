@@ -1,5 +1,6 @@
-const AccountAdmin = require("../../models/account-admin.model")
-const bcrypt = require("bcryptjs")
+const AccountAdmin = require("../../models/account-admin.model");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 module.exports.login = (req, res) => {
     res.render("Admin/pages/login",{
       pageTitle:"Đăng Nhập"
@@ -7,17 +8,17 @@ module.exports.login = (req, res) => {
   }
 module.exports.loginPost = async(req, res) => {
   const {email, password} = req.body
-  const exitsAccount = await AccountAdmin.findOne({
+  const existAccount = await AccountAdmin.findOne({
     email : email
   })
-  if(!exitsAccount) {
+  if(!existAccount) {
     res.json({
       code:"error",
       message:"Email không tồn tại"
     })
     return;
   }
-  const isPasswordValid = await bcrypt.compare(password, exitsAccount.password);
+  const isPasswordValid = await bcrypt.compare(password, existAccount.password);
   if(!isPasswordValid) {
     res.json({
       code: "error",
@@ -26,13 +27,31 @@ module.exports.loginPost = async(req, res) => {
     return;
   }
 
-  if(exitsAccount.status != "active") {
+  if(existAccount.status != "active") {
     res.json({
       code: "error",
       message: "Tài khoản chưa được kích hoạt!"
     });
     return;
   }
+  // Tạo JWT
+  const token = jwt.sign(
+    {
+      id: existAccount.id,
+      email: existAccount.email
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '1d' // Token có thời hạn 1 ngày
+    }
+  )
+
+  // Lưu token vào cookie
+  res.cookie("token", token, {
+    maxAge: 24 * 60 * 60 * 1000, // Token có hiệu lực trong 1 ngày
+    httpOnly: true,
+    sameSite: "strict"
+  })
 
   res.json({
     code: "success",
