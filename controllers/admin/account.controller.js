@@ -5,6 +5,41 @@ module.exports.login = (req, res) => {
       pageTitle:"Đăng Nhập"
     })
   }
+module.exports.loginPost = async(req, res) => {
+  const {email, password} = req.body
+  const exitsAccount = await AccountAdmin.findOne({
+    email : email
+  })
+  if(!exitsAccount) {
+    res.json({
+      code:"error",
+      message:"Email không tồn tại"
+    })
+    return;
+  }
+  const isPasswordValid = await bcrypt.compare(password, exitsAccount.password);
+  if(!isPasswordValid) {
+    res.json({
+      code: "error",
+      message: "Mật khẩu không đúng!"
+    });
+    return;
+  }
+
+  if(exitsAccount.status != "active") {
+    res.json({
+      code: "error",
+      message: "Tài khoản chưa được kích hoạt!"
+    });
+    return;
+  }
+
+  res.json({
+    code: "success",
+    message: "Đăng nhập tài khoản thành công!"
+  });
+
+}
 module.exports.register = (req, res) => {
     res.render("Admin/pages/register",{
       pageTitle:"Đăng Ký"
