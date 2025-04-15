@@ -46,7 +46,8 @@ if(loginForm) {
       const rememberPassword = event.target.rememberPassword.checked;
       const dataFinal ={
         email: email,
-        password:password
+        password:password,
+        rememberPassword:rememberPassword
       }
       fetch(`/${pathAdmin}/account/login`,{
         method:"POST",
@@ -64,6 +65,8 @@ if(loginForm) {
           window.location.href = `/${pathAdmin}/dashboard`;
         }
       })
+
+      console.log(rememberPassword);
     })
   ;
 }
