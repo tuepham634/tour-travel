@@ -155,6 +155,46 @@ module.exports.otpPassword = (req, res) => {
     pageTitle:"Nhập Mã OTP"
   })
 }
+module.exports.otpPasswordPost = async (req, res) => {
+  const {email, otp} = req.body;
+  // Kiểm tra có tồn tại bản ghi trong ForgotPassword
+  const existRecord = await ForgotPassword.findOne({
+    otp : otp,
+    email : email
+  })
+  if(!existRecord){
+    res.json({
+      code : "error",
+      message: "Mã OTP không chính xác"
+    })
+    return;
+  }
+  // Tìm thông tin của người dùng trong AccountAdmin
+  const account = await AccountAdmin.findOne({
+    email : email
+  })
+  // Tạo JWT 
+  const token = jwt.sign({
+    id : account.id,
+    email : account.email
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: '1d' // token có thời hạn 1 ngày
+  }
+ )
+
+  // // Lưu token vào cookie
+  res.cookie("token",token,{
+    maxAge: 24 * 60 * 60 * 1000, // Token có hiệu lực trong 1 ngày
+    httpOnly:true,
+    sameSite: "strict"
+  })
+  res.json({
+    code: "success",
+    message: "Xác thực OTP thành công!"
+  })
+}
 module.exports.resetPassword = (req, res) => {
   res.render("Admin/pages/reset-password",{
     pageTitle:"Đổi Mật Khẩu"
