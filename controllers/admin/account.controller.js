@@ -60,6 +60,8 @@ module.exports.loginPost = async(req, res) => {
     code: "success",
     message: "Đăng nhập tài khoản thành công!"
   });
+  // console.log("Đăng nhập:", existAccount._id, existAccount.email);
+
 
 }
 module.exports.register = (req, res) => {
@@ -199,6 +201,29 @@ module.exports.resetPassword = (req, res) => {
   res.render("Admin/pages/reset-password",{
     pageTitle:"Đổi Mật Khẩu"
   })
+}
+module.exports.resetPasswordPost = async(req, res) => {
+  const { password} = req.body;
+  const salt = bcrypt.genSaltSync(10); // Tạo ra chuỗi ngẫu nhiên có 10 ký tự
+  const hashedPassword = bcrypt.hashSync(password, salt);
+  await AccountAdmin.updateOne({
+    _id: req.account.id
+  },
+  {
+    password: hashedPassword
+  })
+  // Xóa bản ghi trong ForgotPassword
+  await ForgotPassword.deleteOne({
+    email: req.account.email
+  })
+  res.clearCookie("token");
+  res.json({
+    code: "success",
+    message: "Đổi mật khẩu thành công!"
+  })
+  // console.log("Reset mật khẩu cho ID:", req.account?._id || req.account?.id);
+  // console.log("Email:", req.account?.email);
+
 }
 module.exports.logoutPost = async (req, res) => {
   res.clearCookie("token");
