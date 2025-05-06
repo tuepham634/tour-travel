@@ -19,6 +19,7 @@ module.exports.verifyToken = async (req, res, next) => {
       status: "active"
     })
     req.account = existAccount;
+    res.locals.account = existAccount;
     if(!existAccount) {
       res.clearCookie("token");
       res.redirect(`/${pathAdmin}/account/login`);
