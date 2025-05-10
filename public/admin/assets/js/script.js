@@ -761,3 +761,24 @@ const listButtonDelete = document.querySelectorAll("[button-delete]");
   }
 
 // End Button Delete
+// filter status
+const filterStatus = document.querySelector("[filter-status]");
+if(filterStatus){
+  const url = new URL(window.location.href);
+  //lắng nghe thay đổi lựa chọn
+  filterStatus.addEventListener("change", () => {
+    const value = filterStatus.value;
+    if(value){
+      url.searchParams.set("status",value);
+    }else {
+      url.searchParams.delete("status")
+    }
+    window.location.href =url.href;
+  })
+  //hiển thị cái lựa chọn mặc định
+  const valueCurrent = url.searchParams.get("status");
+  if(valueCurrent){
+    filterStatus.value= valueCurrent
+  }
+}
+// end filter status
