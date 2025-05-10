@@ -42,7 +42,6 @@ module.exports.create = async (req, res) => {
     categoryList : categoryTree
   })
 }
-
 module.exports.createPost = async (req, res) => {
   if(req.body.position){
     req.body.position = parseInt(req.body.position);
@@ -82,7 +81,6 @@ module.exports.edit = async (req,res) => {
       res.redirect(`/${pathAdmin}/category/list`);
   }
 }
-
 module.exports.editPatch = async (req,res) => {
   try {
     const id = req.params.id;
@@ -119,3 +117,24 @@ module.exports.editPatch = async (req,res) => {
 
   }
 }
+module.exports.deletePatch = async (req,res) => {
+ try {
+  const id = req.params.id;
+  await Category.updateOne({
+    _id: id,
+  },{
+    deleted:true,
+    updateBy:req.account.id,
+    deletedAt:Date.now()
+  })
+  req.flash("success", "Xóa danh mục thành công");
+  res.json({
+    code:"success"
+  })
+ } catch (error) {
+    res.json({
+      code: "error",
+      message:"Id không hợp lệ!!!"
+    })
+ }
+} 
