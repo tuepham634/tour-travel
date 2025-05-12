@@ -847,3 +847,13 @@ if(filterEndDate){
   }
 }
 // End Filter end date
+// Filter reset
+const filterReset = document.querySelector("[filter-reset]");
+if(filterReset) {
+  const url = new URL(window.location.href);
+  filterReset.addEventListener("click", () => {
+    url.search = "";
+    window.location.href = url.href;
+  })
+}
+// Filter reset
