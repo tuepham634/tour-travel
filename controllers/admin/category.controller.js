@@ -12,10 +12,24 @@ module.exports.list = async(req, res) => {
   }
     //end lọc theo trạng thái
   //lọc theo người tạo
-    if(req.query.createBy) {
+  if(req.query.createBy) {
     find.createBy = req.query.createBy;
   }
   // Hết Lọc theo người tạo
+  //Lọc theo ngày
+  const dataFilter = {}
+  if(req.query.startDate){
+    const startDate = moment(req.query.startDate).startOf("Date").toDate();
+    dataFilter.$gte = startDate
+  }
+  if(req.query.endDate){
+    const endDate = moment(req.query.endDate).endOf("Date").toDate();
+    dataFilter.$lte = endDate;
+  }
+  if(Object.keys(dataFilter).length >0){
+    find.createdAt = dataFilter
+  }
+  //Hết Lọc theo ngày
   const categoryList = await Category.find(
     find
   ).sort({
