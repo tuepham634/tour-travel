@@ -41,11 +41,35 @@ module.exports.list = async(req, res) => {
     console.log(keywordRegex);
   }
   //hết Tìm kiếm
+  //phân trang
+  //hết phân trang
+  const limitPages = 3;
+  let page = 1;
+  if(req.query.page){
+    const currentPage = parseInt(req.query.page);
+    if(currentPage){
+      page = currentPage
+    }
+  }
+    const totalRecord = await Category.countDocuments(find);
+    const totalPages = Math.ceil(totalRecord/limitPages);
+    if(page >totalPages){
+      page = totalPages
+    }
+    const skip = (page -1) * limitPages;
+    const pagination = {
+      skip:skip,
+      totalPages:totalPages,
+      totalRecord:totalRecord
+    }
   const categoryList = await Category.find(
     find
   ).sort({
     position: "desc"
   })
+  .limit(limitPages)
+  .skip(skip);
+
   for(const item of categoryList){
     if(item.createBy){
       const infoAccountCreated = await AccountAdmin.findOne({
@@ -73,7 +97,8 @@ module.exports.list = async(req, res) => {
   res.render("Admin/pages/category-list",{
     pageTitle:"Quản Lý Danh Mục",
     categoryList: categoryList,
-    accountAdminList: accountAdminList
+    accountAdminList: accountAdminList,
+    pagination:pagination
   })
 }
 module.exports.create = async (req, res) => {
