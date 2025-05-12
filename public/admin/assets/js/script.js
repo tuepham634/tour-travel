@@ -920,3 +920,26 @@ if (changeMulti) {
   });
 }
 // End Change multi
+// Search
+const search = document.querySelector("[search]");
+if(search){
+  const url = new URL(window.location.href);
+  search.addEventListener("keyup",(event) => {
+    if(event.code == "Enter"){
+      const value = search.value
+      if(value){
+        url.searchParams.set("keyword",value.trim());
+      }else{
+        url.searchParams.delete("keyword")
+      }
+
+      window.location.href = url.href
+    }
+  })
+  const valueCurrent = url.searchParams.get("keyword");
+  if(valueCurrent){
+    search.value = valueCurrent;
+  }
+  
+}
+// End Search
