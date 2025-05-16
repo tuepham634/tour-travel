@@ -1,10 +1,38 @@
+const moment = require("moment");
 const Category = require("../../models/category.model");
+const AccountAdmin = require("../../models/account-admin.model");
 const City = require("../../models/city.model");
 const Tour = require("../../models/tour.model");
 const categoryHelper = require("../../helpers/category.helper");
 module.exports.list = async(req, res) => {
+    const find = {
+        deleted: false
+    }
+    const tourList = await Tour
+    .find(find)
+    .sort({
+        position:"desc"
+    })
+    for(const item of tourList){
+        if(item.createBy){
+            const infoAccountCreated = await AccountAdmin.findOne({
+                _id:item.createBy
+            })
+            item.createdByFullName = infoAccountCreated.fullName;
+        }
+        if(item.updateBy){
+            const infoAccountUpdated = await AccountAdmin.findOne({
+                _id:item.updateBy
+            })
+            item.updatedByFullName = infoAccountUpdated.fullName
+        }
+        item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY");
+        item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY");
+    }
+
     res.render("Admin/pages/tour-list",{
-        pageTitle:"Quản lý tour"
+        pageTitle:"Quản lý tour",
+        tourList:tourList
     })
 }
 module.exports.create = async(req, res) => {
@@ -29,8 +57,9 @@ module.exports.createPost = async(req, res) => {
         const totalRecord = await Tour.countDocuments({});
         req.body.position = totalRecord + 1;
     }
-    req.body.createdBy = req.account.id;
+    req.body.createBy = req.account.id;
     req.body.updateBy = req.account.id;
+    req.body.avatar = req.file ? req.file.path : "";
     req.body.priceAdult = req.body.priceAdult ? parseInt(req.body.priceAdult):0;
     req.body.priceChildren = req.body.priceChildren ? parseInt(req.body.priceChildren):0;
     req.body.priceBaby = req.body.priceBaby ? parseInt(req.body.priceBaby):0;

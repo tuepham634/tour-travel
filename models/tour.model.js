@@ -22,8 +22,8 @@ const schema = new mongoose.Schema({
     departureDate: Date,
     information: String,
     schedules: Array,
-    createdBy: String,
-    updatedBy: String,
+    createBy: String,
+    updateBy: String,
     slug: {
       type: String,
       slug: "name",
