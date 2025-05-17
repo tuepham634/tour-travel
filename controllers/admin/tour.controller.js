@@ -202,3 +202,39 @@ module.exports.trash = async (req, res) => {
         tourList:tourList
     })
 }
+module.exports.undoPatch = async (req, res) => {
+    try {
+        const id =req.params.id;
+        await Tour.updateOne({
+            _id:id
+        },{
+            deleted:false
+        })
+        req.flash("succes","Khôi phục thành công");
+        res.json({
+            code:"success"
+        })
+    } catch (error) {
+        res.json({
+            code:"error",
+            message:"Id không hợp lệ"
+        })
+    }
+}
+module.exports.deleteDestroyPatch = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await Tour.deleteOne({
+            _id:id
+        })
+        req.flash("success","Xóa vĩnh viễn");
+        res.json({
+            code:"success"
+        })
+    } catch (error) {
+        res.json({
+            code:"error",
+            message:"ID khong tồn tại"
+        })
+    }
+}
