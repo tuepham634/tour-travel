@@ -27,4 +27,6 @@ router.get('/role/list', settingController.roleList)
 
 router.get('/role/create', settingController.roleCreate)
 
+router.post('/role/create', settingController.roleCreatePost)
+
 module.exports = router;
