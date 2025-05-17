@@ -19,6 +19,7 @@ router.patch(
     tourValidate.createPost
     ,tourController.editPatch
 );
+router.patch('/delete/:id',tourController.deletePatch);
 router.get('/trash',tourController.trash);
 
 

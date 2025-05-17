@@ -152,8 +152,53 @@ module.exports.editPatch = async(req, res) => {
         })
     }
 }
-module.exports.trash = (req, res) => {
+module.exports.deletePatch = async(req, res) => {
+    try {
+        const id = req.params.id;
+        await Tour.updateOne({
+            _id:id
+        },{
+            deleted:true,
+            deletedBy:req.account.id,
+            deletedAt: Date.now()
+        })
+        req.flash("success","Xóa tour thành công");
+        res.json({
+            code:"success"
+        })
+    } catch (error) {
+        res.json({
+            code: "error",
+            message:"id không hợp lệ"
+        })
+    }
+}
+module.exports.trash = async (req, res) => {
+   const tourList = await Tour.find({
+        deleted:true
+    }).sort({
+        deletedAt: "desc"
+    })
+    for(const item of tourList){
+        if(item.createBy){
+            const infoAccountCreated = await AccountAdmin.findOne({
+                _id:item.createBy
+            })
+            item.createdByFullName =  infoAccountCreated.fullName;
+        }
+        if(item.deletedBy){
+            const infoAccountDeleted = await AccountAdmin.findOne({
+                _id:item.deletedBy
+            })
+            item.deletedByFullName = infoAccountDeleted.fullName;
+        }
+
+        item.createdAtFormat = moment(item.createdAt).format("HH:MM - DD/MM/YYYY");
+        item.deletedAtFormat = moment(item.deletedAt).format("HH:MM - DD/MM/YYYY");
+    }
+
     res.render("Admin/pages/tour-trash",{
-        pageTitle:"Thùng rác tour"
+        pageTitle:"Thùng rác tour",
+        tourList:tourList
     })
 }
