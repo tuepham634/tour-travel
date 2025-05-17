@@ -238,3 +238,35 @@ module.exports.deleteDestroyPatch = async (req, res) => {
         })
     }
 }
+module.exports.trashChangeMultiPatch = async (req, res) => {
+    try {
+        const {option, ids} = req.body;
+        switch (option) {
+            case "undo":
+                // console.log("Chạy vào đây a")
+                await Tour.updateMany({
+                    _id: {$in: ids}
+                    },
+                    {deleted:false}
+                )
+                req.flash("success","Khôi phục thành công");
+                break;
+        
+            case "delete-destroy":
+                // console.log("Chạy vào đây b")
+                await Tour.deleteMany({
+                    _id:{$in: ids}
+                })
+                req.flash("success","Xóa vĩnh viễn thành công");
+                break;
+        }
+        res.json({
+            code:"success"
+        })
+    } catch (error) {
+        res.json({
+            code:"error",
+            message:"Id không tồn tại"
+        })
+    }
+}
