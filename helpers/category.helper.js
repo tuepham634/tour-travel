@@ -6,6 +6,7 @@ const buildCategoryTree = (categories, parentId = "") => {
             tree.push({
                 id:item.id,
                 name:item.name,
+                slug:item.slug,
                 children: children,
             })
         }
