@@ -1,52 +1,57 @@
 extends ../layouts/default.pug
 block main
-  h1.box-title Nhóm quyền
+  if (permissions.includes("rolelist-view"))
+    h1.box-title Nhóm quyền
 
-  //- Section 5
-  .section-5
-    .inner-wrap
-      .inner-change-status
-        .inner-item
-          select
-            option(value="") -- Hành động --
-            option(value="") Xóa
-        .inner-item
-          button Áp dụng
-      .inner-search
-        <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm")
-      .inner-button-create
-        a(href=`/${pathAdmin}/setting/role/create`) + Tạo mới
-  //- End Section 5
+    //- Section 5
+    .section-5
+      .inner-wrap
+        .inner-change-status
+          .inner-item
+            select
+              option(value="") -- Hành động --
+              option(value="") Xóa
+          .inner-item
+            button Áp dụng
+        .inner-search
+          <i class="fa-solid fa-magnifying-glass"></i>
+          input(type="text" placeholder="Tìm kiếm")
+        if (permissions.includes("rolelist-create"))
+          .inner-button-create
+            a(href=`/${pathAdmin}/setting/role/create`) + Tạo mới
+    //- End Section 5
 
-  //- Section 6
-  .section-6
-    .table-2
-      table
-        thead
-          tr
-            th(class="inner-center")
-              input(type="checkbox" class="inner-check")
-            th Tên nhóm quyền
-            th Mô tả ngắn
-            th Hành động
-        tbody
-          each item in roleList
+    //- Section 6
+    .section-6
+      .table-2
+        table
+          thead
             tr
-              td(class="inner-center")
+              th(class="inner-center")
                 input(type="checkbox" class="inner-check")
-              td #{item.name}
-              td #{item.description}
-              td
-                .inner-buttons
-                  a(
-                    href=`/${pathAdmin}/setting/role/edit/${item.id}`
-                    class="inner-edit"
-                  ) <i class="fa-regular fa-pen-to-square"></i>
-                  button(
-                    class="inner-delete"
-                    button-delete
-                    data-api=`/${pathAdmin}/setting/role/delete/${item.id}`
-                  ) <i class="fa-regular fa-trash-can"></i>
+              th Tên nhóm quyền
+              th Mô tả ngắn
+              if (permissions.includes("rolelist-edit"))
+                th Hành động
+          tbody
+            each item in roleList
+              tr
+                td(class="inner-center")
+                  input(type="checkbox" class="inner-check")
+                td #{item.name}
+                td #{item.description}
+                td
+                  if (permissions.includes("rolelist-edit"))
+                    .inner-buttons
+                      a(
+                        href=`/${pathAdmin}/setting/role/edit/${item.id}`
+                        class="inner-edit"
+                      ) <i class="fa-regular fa-pen-to-square"></i>
+                  if (permissions.includes("rolelist-delete"))
+                      button(
+                        class="inner-delete"
+                        button-delete
+                        data-api=`/${pathAdmin}/setting/role/delete/${item.id}`
+                      ) <i class="fa-regular fa-trash-can"></i>
 
-  //- End Section 6
+    //- End Section 6

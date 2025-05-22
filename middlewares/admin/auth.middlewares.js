@@ -24,7 +24,12 @@
       })
       existAccount.roleName = role.name;
       req.account = existAccount;
+
+      req.permissions  = role.permissions
+
       res.locals.account = existAccount;
+
+      res.locals.permissions = role.permissions;
       if(!existAccount) {
         res.clearCookie("token");
         res.redirect(`/${pathAdmin}/account/login`);
