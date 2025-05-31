@@ -175,9 +175,7 @@ module.exports.editPatch = async (req,res) => {
     res.json({
       code: "success"
     })
-    res.render(`Admin/pages/category-edit/${id}`,{
-      pageTitle:"Sửa Danh Mục"
-    })
+
   } catch (error) {
       res.json({
         code: "error",

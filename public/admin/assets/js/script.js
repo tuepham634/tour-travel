@@ -248,7 +248,7 @@ if (categoryEditForm) {
         method: "PATCH",
         body: formData,
       })
-        .then((res) => res.json)
+        .then((res) => res.json())
         .then((data) => {
           if (data.code == "error") {
             alert(data.message);
