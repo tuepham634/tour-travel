@@ -37,7 +37,7 @@ module.exports.permissionList = [
   },
   {
     label :  "Xóa tour" ,
-    value :  " tour-delete "
+    value :  "tour-delete"
   },
   {
     label :  "Thùng rác tour",

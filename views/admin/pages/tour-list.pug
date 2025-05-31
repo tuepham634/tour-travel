@@ -57,12 +57,12 @@ block main
         .inner-search
           <i class="fa-solid fa-magnifying-glass"></i>
           input(type="text" placeholder="Tìm kiếm")
-          if (permissions.includes("tour-create"))
-            .inner-button-create
-              a(href=`/${pathAdmin}/tour/create`) + Tạo mới
-          if (permissions.includes("tour-trash"))
-            .inner-button-trash
-              a(href=`/${pathAdmin}/tour/trash`) Thùng rác
+        if (permissions.includes("tour-create"))
+          .inner-button-create
+            a(href=`/${pathAdmin}/tour/create`) + Tạo mới
+        if (permissions.includes("tour-trash"))
+          .inner-button-trash
+            a(href=`/${pathAdmin}/tour/trash`) Thùng rác
     //- End Section 5
 
     //- Section 6

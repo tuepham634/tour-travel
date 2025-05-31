@@ -460,7 +460,7 @@ if (tourEditForm) {
       formData.append("schedules",JSON.stringify(schedules))
        
       fetch(`/${pathAdmin}/tour/edit/${id}`,{
-        method:"PATCH",
+        method:"POST",
         body:formData
       })
       .then(res => res.json())
