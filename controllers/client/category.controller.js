@@ -1,5 +1,6 @@
 const Category = require("../../models/category.model")
 const Tour = require("../../models/tour.model");
+const City = require("../../models/city.model");
 const categoryHelper = require("../../helpers/category.helper");
 const moment = require("moment");
 module.exports.list = async (req, res) => {
@@ -58,13 +59,15 @@ module.exports.list = async (req, res) => {
             
         }
         // Hết Danh sách tour
+        const cityList = await City.find({});
 
         res.render("client/pages/tour-list", {
             pageTitle: "Danh sách tour",
             breadcrumb: breadcrumb,
             category: category,
             tourList: tourList,
-            totalTour: totalTour
+            totalTour: totalTour,
+            cityList:cityList
         });
     } else {
         res.redirect("/");
