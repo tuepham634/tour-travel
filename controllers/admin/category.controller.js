@@ -43,20 +43,22 @@ module.exports.list = async(req, res) => {
   //hết Tìm kiếm
   //phân trang
   //hết phân trang
-  const limitPages = 3;
-  let page = 1;
-  if(req.query.page){
-    const currentPage = parseInt(req.query.page);
-    if(currentPage){
-      page = currentPage
-    }
-  }
-    const totalRecord = await Category.countDocuments(find);
-    const totalPages = Math.ceil(totalRecord/limitPages);
-    if(page >totalPages){
-      page = totalPages
-    }
-    const skip = (page -1) * limitPages;
+ const limitPages = 3;
+let page = parseInt(req.query.page) || 1;
+
+if (isNaN(page) || page < 1) {
+  page = 1;
+}
+
+const totalRecord = await Category.countDocuments(find);
+const totalPages = Math.ceil(totalRecord / limitPages);
+
+// Nếu totalPages = 0, giữ page = 1 để skip không bị âm
+if (page > totalPages && totalPages > 0) {
+  page = totalPages;
+}
+
+const skip = (page - 1) * limitPages;
     const pagination = {
       skip:skip,
       totalPages:totalPages,
@@ -112,23 +114,30 @@ module.exports.create = async (req, res) => {
   })
 }
 module.exports.createPost = async (req, res) => {
-  if(req.body.position){
-    req.body.position = parseInt(req.body.position);
-  }else {
-    const totalRecord = await Category.countDocuments({});
-    req.body.position = totalRecord + 1;
+  console.log(req.body);
+  try {
+    if (req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const totalRecord = await Category.countDocuments({});
+      req.body.position = totalRecord + 1;
+    }
+    req.body.createBy = req.account.id;
+    req.body.updateBy = req.account.id;
+    req.body.avatar = req.file ? req.file.path : "";
+    const newRecord = new Category(req.body);
+    await newRecord.save();
+    req.flash("success", "Tạo danh mục thành công");
+    res.json({
+      code: "success",
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Tạo danh mục thất bại"
+    });
   }
-  req.body.createBy = req.account.id;
-  req.body.updateBy = req.account.id;
-  req.body.avatar = req.file ? req.file.path : "";
-  const newRecord = new Category(req.body);
-  await newRecord.save();
-  req.flash("success","Tạo danh mục thành công")
-  res.json({
-    code: "success"
-  })
-
-}
+};
 module.exports.edit = async (req,res) => {
   try {
     const categoryList = await Category.find({
