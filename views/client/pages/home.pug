@@ -23,6 +23,7 @@ block main
           data-aos-duration="800" 
           data-aos="fade-up" 
           action="#"
+          form-search
           )
           .inner-box.inner-address
             .inner-input-group
@@ -30,6 +31,7 @@ block main
               input.inner-input(
                 placeholder="Bạn muốn đi đâu?" 
                 type="text"
+                name="locationTo"
                 )
               i.fa-solid.fa-angle-down.inner-down
             .inner-suggest
@@ -70,6 +72,7 @@ block main
               input.inner-input(
                 placeholder="Số lượng" 
                 type="text"
+                readonly
                 )
               i.fa-solid.fa-angle-down.inner-down
             .inner-quantity
@@ -77,25 +80,25 @@ block main
                 .inner-label Người lớn
                 .inner-count
                   span.inner-down -
-                  span.inner-number 1
+                  span.inner-number(stock-adult) 1
                   span.inner-up +
               .inner-item
                 .inner-label Trẻ em
                 .inner-count
                   span.inner-down -
-                  span.inner-number 0
+                  span.inner-number(stock-children) 0
                   span.inner-up +
               .inner-item
                 .inner-label Em bé
                 .inner-count
                   span.inner-down -
-                  span.inner-number 0
+                  span.inner-number(stock-baby) 0
                   span.inner-up +
           .inner-box.inner-calendar
             .inner-input-group
               img.inner-icon(src="/assets/images/icon-calendar.svg")
-              input.inner-input(type="date")
-          button.inner-button(type="submit")
+              input.inner-input(type="date" name="departureDate")
+          button.inner-button(type="submit" )
             i.fa-solid.fa-magnifying-glass
             | Tìm Kiếm
   // End Section 1
