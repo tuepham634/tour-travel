@@ -1302,6 +1302,52 @@ if (filterEndDate) {
   }
 }
 // End Filter end date
+//Filter category
+const filterCategory = document.querySelector("[filter-category]");
+if (filterCategory) {
+  const url = new URL(window.location.href);
+  //lăng nghe sự thay đổi
+  filterCategory.addEventListener("change", () => {
+    const value = filterCategory.value;
+    if (value) {
+      url.searchParams.set("category", value);
+    } else {
+      url.searchParams.delete("category");
+    }
+    window.location.href = url.href;
+  });
+  const valueCurrent = url.searchParams.get("category");
+  if (valueCurrent) {
+    filterCategory.value = valueCurrent;
+  }
+}
+// End Filter category
+
+//filter-price
+const filterPrice = document.querySelector('select[name="priceAdult"]');
+console.log(filterPrice);
+if (filterPrice) {
+  const url = new URL(window.location.href);
+  //Lắng nghe sự thay đổi
+  filterPrice.addEventListener("change", () => {
+    const value = filterPrice.value;
+    if (value) {
+      url.searchParams.set("priceAdult", value);
+    } else {
+      url.searchParams.delete("priceAdult");
+    }
+    window.location.href = url.href;
+  });
+
+  const valueCurrent = url.searchParams.get("priceAdult");
+  if (valueCurrent) {
+    filterPrice.value = valueCurrent;
+  }
+}
+//filter-price
+
+
+
 // Filter reset
 const filterReset = document.querySelector("[filter-reset]");
 if (filterReset) {

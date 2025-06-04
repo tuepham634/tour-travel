@@ -1,4 +1,5 @@
 const moment = require("moment");
+const slugify = require('slugify');
 const Category = require("../../models/category.model");
 const AccountAdmin = require("../../models/account-admin.model");
 const City = require("../../models/city.model");
@@ -8,9 +9,101 @@ module.exports.list = async (req, res) => {
   const find = {
     deleted: false,
   };
+  //Lọc theo trạng thái
+  if(req.query.status) {
+    find.status = req.query.status;
+  }
+  //hết lọc theo trạng thái
+  //Lấy danh sách người tạo
+    const accountAdminList = await AccountAdmin
+    .find({})
+    .select("id fullName");
+
+  //End lấy danh sách
+
+      // Lọc theo người tạo
+    if(req.query.createBy) {
+      find.createBy = req.query.createBy;
+    }
+  // Hết Lọc theo người tạo
+ //Lọc theo ngày
+  const dataFilter = {}
+  if(req.query.startDate){
+    const startDate = moment(req.query.startDate).startOf("Date").toDate();
+    dataFilter.$gte = startDate
+  }
+  if(req.query.endDate){
+    const endDate = moment(req.query.endDate).endOf("Date").toDate();
+    dataFilter.$lte = endDate;
+  }
+  if(Object.keys(dataFilter).length >0){
+    find.createdAt = dataFilter
+  }
+  //Hết Lọc theo ngày
+  //Lấy danh mục
+  const categoryList = await Category.find({
+    deleted: false
+  })
+  const categoryTree = categoryHelper.buildCategoryTree(categoryList);
+
+  //lấy danh mục
+
+  //Loc theo danh mục
+  const categoryId = req.query.category || "";
+  if (categoryId) {
+    const categoryIds = await categoryHelper.getAllSubcategoryIds(categoryId);
+    find.category = { $in: categoryIds }; // Lọc tất cả tour thuộc danh mục cha + con
+  }
+  //End lọc theo danh mục
+  //lọc theo mức giá
+  if(req.query.priceAdult){
+    const [priceMin,priceMax] =req.query.priceAdult.split("-").map(item => parseInt(item));
+    find.priceAdult={
+        $gte:priceMin,
+        $lte:priceMax
+    }
+  }
+  //end lọc theo mức giá
+  //phân trang
+
+ const limitPages = 3;
+  let page = parseInt(req.query.page) || 1;
+
+  if (isNaN(page) || page < 1) {
+    page = 1;
+  }
+
+  const totalRecord = await Tour.countDocuments(find);
+  const totalPages = Math.ceil(totalRecord / limitPages);
+
+  // Nếu totalPages = 0, giữ page = 1 để skip không bị âm
+  if (page > totalPages && totalPages > 0) {
+    page = totalPages;
+  }
+
+  const skip = (page - 1) * limitPages;
+    const pagination = {
+      skip:skip,
+      totalPages:totalPages,
+      totalRecord:totalRecord
+    }
+  //hết phân trang
+    // Tìm kiếm
+  if(req.query.keyword) {
+    const keyword = slugify(req.query.keyword, {
+      lower: true
+    });
+    const keywordRegex = new RegExp(keyword);
+    find.slug = keywordRegex;
+  }
+  // Hết Tìm kiếm
+
+
   const tourList = await Tour.find(find).sort({
-    position: "desc",
-  });
+    position: "asc",
+  }).limit(limitPages)
+  .skip(skip);
+  
   for (const item of tourList) {
     if (item.createBy) {
       const infoAccountCreated = await AccountAdmin.findOne({
@@ -31,6 +124,11 @@ module.exports.list = async (req, res) => {
   res.render("Admin/pages/tour-list", {
     pageTitle: "Quản lý tour",
     tourList: tourList,
+    accountAdminList: accountAdminList,
+    categoryList:categoryTree,
+    parent: categoryId,
+    pagination:pagination
+
   });
 };
 module.exports.create = async (req, res) => {
@@ -242,6 +340,40 @@ module.exports.deletePatch = async (req, res) => {
     });
   }
 };
+module.exports.ChangeMultiPatch = async (req, res) => {
+    try {
+    const {option, ids} = req.body;
+    switch (option) {
+      case "active":
+      case "inactive":
+        await Tour.updateMany({
+          _id:{$in: ids}
+        },{
+          status:option
+        })
+        req.flash("success","Đổi trạng thái thành công!");
+        break;
+      case "delete":
+        await Tour.updateMany({
+          _id:{$in: ids}
+        },{
+          deleted: true,
+          deletedBy: req.account.id,
+          deletedAt: Date.now()
+        })
+        req.flash("success","Xóa thành công!");
+        break;
+    }
+    res.json({
+        code:"success"
+    })
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Id không tồn tại trong hệ thông!"
+    })
+  }
+}
 module.exports.trash = async (req, res) => {
   const tourList = await Tour.find({
     deleted: true,

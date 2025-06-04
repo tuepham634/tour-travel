@@ -29,7 +29,7 @@ router.patch('/delete/:id',tourController.deletePatch);
 router.get('/trash',tourController.trash);
 router.patch('/undo/:id', tourController.undoPatch)
 router.patch('/delete-destroy/:id', tourController.deleteDestroyPatch)
-
+router.patch('/change-multi', tourController.ChangeMultiPatch)
 router.patch('/trash/change-multi', tourController.trashChangeMultiPatch)
 
 module.exports = router;
