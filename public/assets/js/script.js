@@ -549,3 +549,11 @@ if(boxTourDetail){
   })
 }
 //End Box tourDetail
+
+//Mini cart
+const miniCart = document.querySelector("[mini-cart]")
+if(miniCart){
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  miniCart.innerHTML = cart.length;
+}
+//End Mini cart
