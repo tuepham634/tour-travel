@@ -396,7 +396,7 @@ if (tourCreateForm) {
       .then(res => res.json())
       .then(data => {
         if(data.code == "error") {
-          alert("Thất bại..")
+          alert(data.message);
         }
         if(data.code == "success"){
           window.location.href = `/${pathAdmin}/tour/list`

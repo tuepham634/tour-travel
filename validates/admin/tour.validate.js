@@ -7,6 +7,11 @@ module.exports.createPost = (req, res, next) => {
       .messages({
         "string.empty": "Vui lòng nhập tên tour!"
       }),
+    // category: Joi.string()
+    //   .required()
+    //   .messages({
+    //     "string.empty": "Vui lòng chọn Danh mục tour!"
+    // }),
     category: Joi.string().allow(''),
     position: Joi.string().allow(''),
     status: Joi.string().allow(''),
