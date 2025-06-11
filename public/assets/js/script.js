@@ -593,7 +593,13 @@ const drawCart = () => {
           (item) =>
             `<div class="inner-tour-item">
           <div class="inner-actions">
-              <button class="inner-delete"><i class="fa-solid fa-xmark"></i></button>
+              <button 
+                class="inner-delete" 
+                button-delete
+                tour-id="${item.tourId}"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
               <input class="inner-check" type="checkbox">
           </div>
           <div class="inner-product">
@@ -611,7 +617,7 @@ const drawCart = () => {
                         <b>${item.departureDateFormat}</b>
                       </div>
                       <div class="inner-meta-item">Khởi Hành Tại:
-                        <b>${item.locationFrom}</b>
+                        <b>${item.locationFromName}</b>
                       </div>
                   </div>
               </div>
@@ -719,7 +725,19 @@ const drawCart = () => {
           })
         })
         //End cập nhật số lượng
-
+        //Sự kiện xóa item trong giỏ hàng
+        const listButtonDelete = document.querySelectorAll("[button-delete]");
+        listButtonDelete.forEach(button => {
+          button.addEventListener("click", () => {
+            const tourId = button.getAttribute("tour-id");
+            const cart = JSON.parse(localStorage.getItem("cart"));
+            const indexItem = cart.findIndex(tour => tour.tourId == tourId);
+            cart.splice(indexItem,1);
+            localStorage.setItem("cart",JSON.stringify(cart));
+            drawCart();
+          })
+        });
+        //End sự kiện xóa item trong giỏ hàng
 
       }
     });
