@@ -1,6 +1,6 @@
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-menu-mobile");
-if(buttonMenuMobile) {
+if (buttonMenuMobile) {
   const menu = document.querySelector(".header .inner-menu");
 
   // Click vào button mở menu
@@ -10,7 +10,7 @@ if(buttonMenuMobile) {
 
   // Click vào overlay đóng menu
   const overlay = menu.querySelector(".inner-overlay");
-  if(overlay) {
+  if (overlay) {
     overlay.addEventListener("click", () => {
       menu.classList.remove("active");
     });
@@ -28,7 +28,7 @@ if(buttonMenuMobile) {
 
 // Box Address Section 1
 const boxAddressSection1 = document.querySelector(".section-1 .inner-form .inner-box.inner-address");
-if(boxAddressSection1) {
+if (boxAddressSection1) {
   // Ẩn/hiện box suggest
   const input = boxAddressSection1.querySelector(".inner-input");
 
@@ -45,7 +45,7 @@ if(boxAddressSection1) {
   listItem.forEach(item => {
     item.addEventListener("mousedown", () => {
       const title = item.querySelector(".inner-item-title").innerHTML.trim();
-      if(title) {
+      if (title) {
         input.value = title;
       }
     })
@@ -55,7 +55,7 @@ if(boxAddressSection1) {
 
 // Box User Section 1
 const boxUserSection1 = document.querySelector(".section-1 .inner-form .inner-box.inner-user");
-if(boxUserSection1) {
+if (boxUserSection1) {
   // Hiện box quantity
   const input = boxUserSection1.querySelector(".inner-input");
 
@@ -103,7 +103,7 @@ if(boxUserSection1) {
       const parent = button.parentNode;
       const boxNumber = parent.querySelector(".inner-number");
       const number = parseInt(boxNumber.innerHTML.trim());
-      if(number > 0) {
+      if (number > 0) {
         const numberUpdate = number - 1;
         boxNumber.innerHTML = numberUpdate;
         updateQuantityInput();
@@ -115,7 +115,7 @@ if(boxUserSection1) {
 
 // Clock Expire
 const clockExpire = document.querySelector("[clock-expire]");
-if(clockExpire) {
+if (clockExpire) {
   const expireDateTimeString = clockExpire.getAttribute("clock-expire");
 
   // Chuyển đổi chuỗi thời gian thành đối tượng Date
@@ -125,7 +125,7 @@ if(clockExpire) {
   const updateClock = () => {
     const now = new Date();
     const remainingTime = expireDateTime - now; // quy về đơn vị mili giây
-    
+
     if (remainingTime > 0) {
       const days = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
       // Tính số ngày, 24 * 60 * 60 * 1000 Tích của các số này = số mili giây trong 1 ngày
@@ -161,7 +161,7 @@ if(clockExpire) {
 
 // Box Filter
 const buttonFilterMobile = document.querySelector(".section-9 .inner-filter-mobile");
-if(buttonFilterMobile) {
+if (buttonFilterMobile) {
   const boxLeft = document.querySelector(".section-9 .inner-left");
   buttonFilterMobile.addEventListener("click", () => {
     boxLeft.classList.add("active");
@@ -176,7 +176,7 @@ if(buttonFilterMobile) {
 
 // Box Tour Info
 const boxTourInfo = document.querySelector(".box-tour-info");
-if(boxTourInfo) {
+if (boxTourInfo) {
   const buttonReadMore = boxTourInfo.querySelector(".inner-read-more button");
   buttonReadMore.addEventListener("click", () => {
     boxTourInfo.classList.add("active");
@@ -192,7 +192,7 @@ AOS.init();
 
 // Swiper Section 2
 const swiperSection2 = document.querySelector(".swiper-section-2");
-if(swiperSection2) {
+if (swiperSection2) {
   new Swiper('.swiper-section-2', {
     slidesPerView: 1,
     spaceBetween: 20,
@@ -214,7 +214,7 @@ if(swiperSection2) {
 
 // Swiper Section 3
 const swiperSection3 = document.querySelector(".swiper-section-3");
-if(swiperSection3) {
+if (swiperSection3) {
   new Swiper('.swiper-section-3', {
     slidesPerView: 1,
     spaceBetween: 20,
@@ -240,7 +240,7 @@ if(swiperSection3) {
 
 // Swiper Box Images
 const boxImages = document.querySelector(".box-images");
-if(boxImages) {
+if (boxImages) {
   const swiperBoxImagesThumb = new Swiper(".swiper-box-images-thumb", {
     spaceBetween: 5,
     slidesPerView: 4,
@@ -262,26 +262,25 @@ if(boxImages) {
 
 // Zoom Box Images Main
 const boxImagesMain = document.querySelector(".box-images .inner-images-main");
-if(boxImagesMain) {
+if (boxImagesMain) {
   new Viewer(boxImagesMain);
 }
 // End Zoom Box Images Main
 
 // Box Tour Schedule
 const boxTourSchedule = document.querySelector(".box-tour-schedule");
-if(boxTourSchedule) {
+if (boxTourSchedule) {
   new Viewer(boxTourSchedule);
 }
 // End Box Tour Schedule
 
 // Email Form
 const emailForm = document.querySelector("#email-form");
-if(emailForm) {
+if (emailForm) {
   const validation = new JustValidate('#email-form');
 
   validation
-    .addField('#email-input', [
-      {
+    .addField('#email-input', [{
         rule: 'required',
         errorMessage: 'Vui lòng nhập email của bạn!',
       },
@@ -293,53 +292,50 @@ if(emailForm) {
     .onSuccess((event) => {
       const email = event.target.email.value;
       const dataFinal = {
-        email:email
+        email: email
       }
 
-      fetch(`/contact/create`,{
-        method:"POST",
-        headers:{
-          "Content-Type" : "application/json"
-        },
-        body:JSON.stringify(dataFinal)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "error"){
-          alert(data.message);
-        }
+      fetch(`/contact/create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
 
-        if(data.code == "success"){
-          window.location.reload();
-        }
-      })
-    })
-  ;
+          if (data.code == "success") {
+            window.location.reload();
+          }
+        })
+    });
 }
 // End Email Form
 
 // Coupon Form
 const couponForm = document.querySelector("#coupon-form");
-if(couponForm) {
+if (couponForm) {
   const validation = new JustValidate('#coupon-form');
 
   validation
     .onSuccess((event) => {
       const coupon = event.target.coupon.value;
       console.log(coupon);
-    })
-  ;
+    });
 }
 // End Email Form
 
 // Order Form
 const orderForm = document.querySelector("#order-form");
-if(orderForm) {
+if (orderForm) {
   const validation = new JustValidate('#order-form');
 
   validation
-    .addField('#full-name-input', [
-      {
+    .addField('#full-name-input', [{
         rule: 'required',
         errorMessage: 'Vui lòng nhập họ tên!'
       },
@@ -354,8 +350,7 @@ if(orderForm) {
         errorMessage: 'Họ tên không được vượt quá 50 ký tự!',
       },
     ])
-    .addField('#phone-input', [
-      {
+    .addField('#phone-input', [{
         rule: 'required',
         errorMessage: 'Vui lòng nhập số điện thoại!'
       },
@@ -375,8 +370,7 @@ if(orderForm) {
       console.log(phone);
       console.log(note);
       console.log(method);
-    })
-  ;
+    });
 
   // List Input Method
   const listInputMethod = orderForm.querySelectorAll("input[name='method']");
@@ -396,7 +390,7 @@ if(orderForm) {
 // End Order Form
 // Alert
 const alertTime = document.querySelector("[alert-time]");
-if(alertTime) {
+if (alertTime) {
   let time = alertTime.getAttribute("alert-time");
   time = time ? parseInt(time) : 4000;
   setTimeout(() => {
@@ -406,7 +400,7 @@ if(alertTime) {
 // End Alert
 // Box Filter
 const boxFilter = document.querySelector(".box-filter");
-if(boxFilter){
+if (boxFilter) {
   const url = new URL(`${window.location.origin}/search`);
   const buttonApply = boxFilter.querySelector(".inner-button");
   const filterList = [
@@ -418,12 +412,12 @@ if(boxFilter){
     "stockBaby",
     "price"
   ]
-  buttonApply.addEventListener("click",() => {
-    filterList.forEach(item =>{
+  buttonApply.addEventListener("click", () => {
+    filterList.forEach(item => {
       const value = boxFilter.querySelector(`[name="${item}"]`).value;
-      if(value){
-        url.searchParams.set(item,value);
-      }else {
+      if (value) {
+        url.searchParams.set(item, value);
+      } else {
         url.searchParams.delete(item);
       }
     })
@@ -435,47 +429,47 @@ if(boxFilter){
 
 //Form search
 const formSearch = document.querySelector("[form-search]");
-if(formSearch){
+if (formSearch) {
   const url = new URL(`${window.location.origin}/search`);
-  formSearch.addEventListener("submit",(event) => {
+  formSearch.addEventListener("submit", (event) => {
     event.preventDefault();
     //Điểm đến
-    const locationTo =formSearch.locationTo.value;
-    if(locationTo){
-      url.searchParams.set("locationTo",locationTo);
-    }else{
+    const locationTo = formSearch.locationTo.value;
+    if (locationTo) {
+      url.searchParams.set("locationTo", locationTo);
+    } else {
       url.searchParams.delete("locationTo");
     }
     //Số lượng
     const stockAdult = parseInt(formSearch.querySelector("[stock-adult]").innerHTML);
-    if(stockAdult>0){
-      url.searchParams.set("stockAdult",stockAdult);
-    }else{
+    if (stockAdult > 0) {
+      url.searchParams.set("stockAdult", stockAdult);
+    } else {
       url.searchParams.delete("stockAdult");
     }
-    
+
     const stockChildren = parseInt(formSearch.querySelector("[stock-children]").innerHTML);
-    if(stockChildren>0){
-      url.searchParams.set("stockChildren",stockChildren);
-    }else{
+    if (stockChildren > 0) {
+      url.searchParams.set("stockChildren", stockChildren);
+    } else {
       url.searchParams.delete("stockChildren");
     }
 
     const stockBaby = parseInt(formSearch.querySelector("[stock-baby]").innerHTML);
-    if(stockChildren>0){
-      url.searchParams.set("stockBaby",stockBaby);
-    }else{
+    if (stockChildren > 0) {
+      url.searchParams.set("stockBaby", stockBaby);
+    } else {
       url.searchParams.delete("stockBaby");
     }
-// Ngày khởi hành
+    // Ngày khởi hành
     const departureDate = formSearch.departureDate.value;
-    if(departureDate) {
+    if (departureDate) {
       url.searchParams.set("departureDate", departureDate);
     } else {
       url.searchParams.delete("departureDate");
     }
 
-    window.location.href= url.href;
+    window.location.href = url.href;
 
   })
 }
@@ -483,16 +477,16 @@ if(formSearch){
 
 //Box tourDetail
 const boxTourDetail = document.querySelector(".box-tour-detail");
-if(boxTourDetail){
+if (boxTourDetail) {
   // Bước 1 lấy ra các ô input
   const inputStockAdult = document.querySelector("[input-stock-adult]");
   const inputStockChildren = document.querySelector("[input-stock-children]");
   const inputStockBaby = document.querySelector("[input-stock-baby]");
   //Bước 3
   const drawBoxDetail = () => {
-    const quantityAdult =parseInt(inputStockAdult.value);
-    const quantityChildren =parseInt(inputStockChildren.value);
-    const quantityBaby =parseInt(inputStockBaby.value);
+    const quantityAdult = parseInt(inputStockAdult.value);
+    const quantityChildren = parseInt(inputStockChildren.value);
+    const quantityBaby = parseInt(inputStockBaby.value);
 
     const stockAdult = document.querySelector("[stock-adult]");
     const stockChildren = document.querySelector("[stock-children]");
@@ -504,15 +498,15 @@ if(boxTourDetail){
     const priceAdult = parseInt(inputStockAdult.getAttribute("price"));
     const priceChildren = parseInt(inputStockChildren.getAttribute("price"));
     const priceBaby = parseInt(inputStockBaby.getAttribute("price"));
-    const totalPrice = (quantityAdult * priceAdult) +(quantityChildren * priceChildren) + (quantityBaby * priceBaby);;
+    const totalPrice = (quantityAdult * priceAdult) + (quantityChildren * priceChildren) + (quantityBaby * priceBaby);;
 
     const elementTotalPrice = document.querySelector("[total-price]");
-    elementTotalPrice.innerHTML= totalPrice.toLocaleString("vi-VN");
+    elementTotalPrice.innerHTML = totalPrice.toLocaleString("vi-VN");
   }
   //B2 sử lý sự kiện change
-  inputStockAdult.addEventListener("change",drawBoxDetail);
-  inputStockChildren.addEventListener("change",drawBoxDetail);
-  inputStockBaby.addEventListener("change",drawBoxDetail);
+  inputStockAdult.addEventListener("change", drawBoxDetail);
+  inputStockChildren.addEventListener("change", drawBoxDetail);
+  inputStockBaby.addEventListener("change", drawBoxDetail);
 
   //Bước 4 
   const buttonAddToCart = boxTourDetail.querySelector(".inner-button-add-cart");
@@ -523,7 +517,7 @@ if(boxTourDetail){
     const quantityBaby = parseInt(inputStockBaby.value);
     const locationFrom = boxTourDetail.querySelector("[location-from]").value;
 
-    if(quantityAdult > 0 || quantityChildren > 0 || quantityBaby > 0) {
+    if (quantityAdult > 0 || quantityChildren > 0 || quantityBaby > 0) {
       const cartItem = {
         tourId: tourId,
         quantityAdult: quantityAdult,
@@ -533,9 +527,9 @@ if(boxTourDetail){
       }
 
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      
+
       const indexItemExist = cart.findIndex(item => item.tourId == tourId);
-      if(indexItemExist != -1) {
+      if (indexItemExist != -1) {
         cart[indexItemExist] = cartItem;
       } else {
         cart.push(cartItem);
@@ -552,8 +546,123 @@ if(boxTourDetail){
 
 //Mini cart
 const miniCart = document.querySelector("[mini-cart]")
-if(miniCart){
+if (miniCart) {
   const cart = JSON.parse(localStorage.getItem("cart"));
   miniCart.innerHTML = cart.length;
 }
 //End Mini cart
+// page-cart
+const drawCart = () => {
+//lấy giỏ hàng từ localStorage
+const cart = localStorage.getItem("cart");
+
+  fetch(`/cart/detail`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: cart
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.code == "success") {
+      const htmlCart = data.cart.map(item =>
+        `<div class="inner-tour-item">
+          <div class="inner-actions">
+              <button class="inner-delete"><i class="fa-solid fa-xmark"></i></button>
+              <input class="inner-check" type="checkbox">
+          </div>
+          <div class="inner-product">
+              <div class="inner-image">
+                  <a href="/tour/detail/${item.slug}">
+                    <img alt="" src=${item.avatar}>
+                  </a>
+              </div>
+              <div class="inner-content">
+                  <div class="inner-title">
+                    <a href="/tour/detail/${item.slug}">${item.name}</a>
+                  </div>
+                  <div class="inner-meta">
+                      <div class="inner-meta-item">Ngày Khởi Hành:
+                        <b>${item.departureDateFormat}</b>
+                      </div>
+                      <div class="inner-meta-item">Khởi Hành Tại:
+                        <b>${item.locationFrom}</b>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="inner-quantity">
+              <label class="inner-label">Số Lượng Hành Khách</label>
+              <div class="inner-list">
+                  <div class="inner-item">
+                      <div class="inner-item-label">Người lớn:</div>
+                      <div class="inner-item-input">
+                          <input value="${item.quantityAdult}" min="0" type="number">
+                      </div>
+                      <div class="inner-item-price">
+                        <span>${item.quantityAdult}</span>
+                        <span>x</span>
+                        <span class="inner-highlight">
+                          ${item.priceNewAdult.toLocaleString("vi-VN")}
+                        </span>
+                      </div>
+                  </div>
+                  <div class="inner-item">
+                      <div class="inner-item-label">Trẻ em:</div>
+                      <div class="inner-item-input">
+                          <input value="${item.quantityChildren}" min="0" type="number">
+                      </div>
+                      <div class="inner-item-price">
+                        <span>${item.quantityChildren}</span>
+                        <span>x</span>
+                        <span class="inner-highlight">
+                           ${item.priceNewChildren.toLocaleString("vi-VN")}
+                        </span>
+                      </div>
+                  </div>
+                  <div class="inner-item">
+                      <div class="inner-item-label">Em bé:</div>
+                      <div class="inner-item-input">
+                          <input value="${item.quantityBaby}" min="0" type="number">
+                      </div>
+                      <div class="inner-item-price">
+                        <span>${item.quantityBaby}</span>
+                        <span>x</span>
+                        <span class="inner-highlight">
+                          ${item.priceNewBaby.toLocaleString("vi-VN")}
+                        </span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>`
+      )
+      const cartList = document.querySelector("[cart-list]");
+      cartList.innerHTML = htmlCart.join("");
+      // hết hiển thị item-cart
+      //cập nhật giỏ hàng
+      localStorage.setItem("cart",JSON.stringify(data.cart));
+      miniCart.innerHTML = data.cart.length;
+
+      //tính tổng tiền
+      const subTotalPrice = data.cart.reduce((sum, item) => {
+        return sum + ((item.priceNewAdult * item.quantityAdult) + (item.priceNewChildren * item.quantityChildren) + (item.priceNewBaby * item.quantityBaby));
+      },0);
+      const discount = 0;
+      const totalPrice = subTotalPrice - discount;
+      const cartSubTotal =  document.querySelector("[cart-sub-total]");
+      cartSubTotal.innerHTML = subTotalPrice.toLocaleString("vi-VN");
+      const cartTotal = document.querySelector("[cart-total]");
+
+      cartTotal.innerHTML = totalPrice.toLocaleString("vi-VN");
+    }
+
+})
+}
+const pageCart = document.querySelector("[page-cart]");
+if(pageCart) {
+  drawCart();
+}
+
+//end page-cart

@@ -151,6 +151,36 @@ module.exports.createPost = async (req, res) => {
     });
     return;
   }
+  // Bắt lỗi name
+  if (!req.body.name || req.body.name.trim() === "") {
+    return res.json({
+      code: "error",
+      message: "Vui lòng nhập tên tour!",
+    });
+  }
+
+  // Bắt lỗi category
+  if (!req.body.category || req.body.category.trim() === "") {
+    return res.json({
+      code: "error",
+      message: "Vui lòng chọn danh mục!",
+    });
+  }
+
+  // Bắt lỗi departureDate
+  if (!req.body.departureDate) {
+    return res.json({
+      code: "error",
+      message: "Vui lòng chọn ngày khởi hành!",
+    });
+  }
+  // Bắt lỗi avatar (file upload)
+  if (!(req.files && req.files.avatar && req.files.avatar.length > 0)) {
+    return res.json({
+      code: "error",
+      message: "Vui lòng tải ảnh đại diện cho tour!",
+    });
+  }
   if (req.body.position) {
     req.body.position = parseInt(req.body.position);
   } else {
