@@ -18,50 +18,56 @@ if (buttonMenuMobile) {
 
   // Click vào icon down mở sub menu
   const listButtonSubMenu = menu.querySelectorAll("ul > li > i");
-  listButtonSubMenu.forEach(button => {
+  listButtonSubMenu.forEach((button) => {
     button.addEventListener("click", () => {
       button.parentNode.classList.toggle("active");
-    })
+    });
   });
 }
 // End Menu Mobile
 
 // Box Address Section 1
-const boxAddressSection1 = document.querySelector(".section-1 .inner-form .inner-box.inner-address");
+const boxAddressSection1 = document.querySelector(
+  ".section-1 .inner-form .inner-box.inner-address"
+);
 if (boxAddressSection1) {
   // Ẩn/hiện box suggest
   const input = boxAddressSection1.querySelector(".inner-input");
 
   input.addEventListener("focus", () => {
     boxAddressSection1.classList.add("active");
-  })
+  });
 
   input.addEventListener("blur", () => {
     boxAddressSection1.classList.remove("active");
-  })
+  });
 
   // Sự kiện click vào từng item
-  const listItem = boxAddressSection1.querySelectorAll(".inner-suggest-list .inner-item");
-  listItem.forEach(item => {
+  const listItem = boxAddressSection1.querySelectorAll(
+    ".inner-suggest-list .inner-item"
+  );
+  listItem.forEach((item) => {
     item.addEventListener("mousedown", () => {
       const title = item.querySelector(".inner-item-title").innerHTML.trim();
       if (title) {
         input.value = title;
       }
-    })
-  })
+    });
+  });
 }
 // End Box Address Section 1
 
 // Box User Section 1
-const boxUserSection1 = document.querySelector(".section-1 .inner-form .inner-box.inner-user");
+const boxUserSection1 = document.querySelector(
+  ".section-1 .inner-form .inner-box.inner-user"
+);
 if (boxUserSection1) {
   // Hiện box quantity
   const input = boxUserSection1.querySelector(".inner-input");
 
   input.addEventListener("focus", () => {
     boxUserSection1.classList.add("active");
-  })
+  });
 
   // Ẩn box quantity
   document.addEventListener("click", (event) => {
@@ -73,19 +79,23 @@ if (boxUserSection1) {
 
   // Thêm số lượng vào ô input
   const updateQuantityInput = () => {
-    const listBoxNumber = boxUserSection1.querySelectorAll(".inner-count .inner-number");
+    const listBoxNumber = boxUserSection1.querySelectorAll(
+      ".inner-count .inner-number"
+    );
     const listNumber = [];
-    listBoxNumber.forEach(boxNumber => {
+    listBoxNumber.forEach((boxNumber) => {
       const number = parseInt(boxNumber.innerHTML.trim());
       listNumber.push(number);
-    })
+    });
     const value = `NL: ${listNumber[0]}, TE: ${listNumber[1]}, EB: ${listNumber[2]}`;
     input.value = value;
-  }
+  };
 
   // Bắt sự kiện click nút up
-  const listButtonUp = boxUserSection1.querySelectorAll(".inner-count .inner-up");
-  listButtonUp.forEach(button => {
+  const listButtonUp = boxUserSection1.querySelectorAll(
+    ".inner-count .inner-up"
+  );
+  listButtonUp.forEach((button) => {
     button.addEventListener("click", () => {
       const parent = button.parentNode;
       const boxNumber = parent.querySelector(".inner-number");
@@ -93,12 +103,14 @@ if (boxUserSection1) {
       const numberUpdate = number + 1;
       boxNumber.innerHTML = numberUpdate;
       updateQuantityInput();
-    })
-  })
+    });
+  });
 
   // Bắt sự kiện click nút down
-  const listButtonDown = boxUserSection1.querySelectorAll(".inner-count .inner-down");
-  listButtonDown.forEach(button => {
+  const listButtonDown = boxUserSection1.querySelectorAll(
+    ".inner-count .inner-down"
+  );
+  listButtonDown.forEach((button) => {
     button.addEventListener("click", () => {
       const parent = button.parentNode;
       const boxNumber = parent.querySelector(".inner-number");
@@ -108,8 +120,8 @@ if (boxUserSection1) {
         boxNumber.innerHTML = numberUpdate;
         updateQuantityInput();
       }
-    })
-  })
+    });
+  });
 }
 // End Box User Section 1
 
@@ -143,16 +155,16 @@ if (clockExpire) {
       // % 60 Lấy phần dư khi chia tổng số giây cho 60 để chỉ lấy số giây còn lại trong phút.
 
       // Cập nhật giá trị vào thẻ span
-      const listBoxNumber = clockExpire.querySelectorAll('.inner-number');
-      listBoxNumber[0].innerHTML = `${days}`.padStart(2, '0');
-      listBoxNumber[1].innerHTML = `${hours}`.padStart(2, '0');
-      listBoxNumber[2].innerHTML = `${minutes}`.padStart(2, '0');
-      listBoxNumber[3].innerHTML = `${seconds}`.padStart(2, '0');
+      const listBoxNumber = clockExpire.querySelectorAll(".inner-number");
+      listBoxNumber[0].innerHTML = `${days}`.padStart(2, "0");
+      listBoxNumber[1].innerHTML = `${hours}`.padStart(2, "0");
+      listBoxNumber[2].innerHTML = `${minutes}`.padStart(2, "0");
+      listBoxNumber[3].innerHTML = `${seconds}`.padStart(2, "0");
     } else {
       // Khi hết thời gian, dừng đồng hồ
       clearInterval(intervalClock);
     }
-  }
+  };
 
   // Gọi hàm cập nhật đồng hồ mỗi giây
   const intervalClock = setInterval(updateClock, 1000);
@@ -160,17 +172,21 @@ if (clockExpire) {
 // End Clock Expire
 
 // Box Filter
-const buttonFilterMobile = document.querySelector(".section-9 .inner-filter-mobile");
+const buttonFilterMobile = document.querySelector(
+  ".section-9 .inner-filter-mobile"
+);
 if (buttonFilterMobile) {
   const boxLeft = document.querySelector(".section-9 .inner-left");
   buttonFilterMobile.addEventListener("click", () => {
     boxLeft.classList.add("active");
-  })
+  });
 
-  const overlay = document.querySelector(".section-9 .inner-left .inner-overlay");
+  const overlay = document.querySelector(
+    ".section-9 .inner-left .inner-overlay"
+  );
   overlay.addEventListener("click", () => {
     boxLeft.classList.remove("active");
-  })
+  });
 }
 // End Box Filter
 
@@ -180,7 +196,7 @@ if (boxTourInfo) {
   const buttonReadMore = boxTourInfo.querySelector(".inner-read-more button");
   buttonReadMore.addEventListener("click", () => {
     boxTourInfo.classList.add("active");
-  })
+  });
 
   new Viewer(boxTourInfo);
 }
@@ -193,7 +209,7 @@ AOS.init();
 // Swiper Section 2
 const swiperSection2 = document.querySelector(".swiper-section-2");
 if (swiperSection2) {
-  new Swiper('.swiper-section-2', {
+  new Swiper(".swiper-section-2", {
     slidesPerView: 1,
     spaceBetween: 20,
     autoplay: {
@@ -215,7 +231,7 @@ if (swiperSection2) {
 // Swiper Section 3
 const swiperSection3 = document.querySelector(".swiper-section-3");
 if (swiperSection3) {
-  new Swiper('.swiper-section-3', {
+  new Swiper(".swiper-section-3", {
     slidesPerView: 1,
     spaceBetween: 20,
     autoplay: {
@@ -277,33 +293,34 @@ if (boxTourSchedule) {
 // Email Form
 const emailForm = document.querySelector("#email-form");
 if (emailForm) {
-  const validation = new JustValidate('#email-form');
+  const validation = new JustValidate("#email-form");
 
   validation
-    .addField('#email-input', [{
-        rule: 'required',
-        errorMessage: 'Vui lòng nhập email của bạn!',
+    .addField("#email-input", [
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập email của bạn!",
       },
       {
-        rule: 'email',
-        errorMessage: 'Email không đúng định dạng!',
+        rule: "email",
+        errorMessage: "Email không đúng định dạng!",
       },
     ])
     .onSuccess((event) => {
       const email = event.target.email.value;
       const dataFinal = {
-        email: email
-      }
+        email: email,
+      };
 
       fetch(`/contact/create`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(dataFinal)
-        })
-        .then(res => res.json())
-        .then(data => {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataFinal),
+      })
+        .then((res) => res.json())
+        .then((data) => {
           if (data.code == "error") {
             alert(data.message);
           }
@@ -311,7 +328,7 @@ if (emailForm) {
           if (data.code == "success") {
             window.location.reload();
           }
-        })
+        });
     });
 }
 // End Email Form
@@ -319,45 +336,46 @@ if (emailForm) {
 // Coupon Form
 const couponForm = document.querySelector("#coupon-form");
 if (couponForm) {
-  const validation = new JustValidate('#coupon-form');
+  const validation = new JustValidate("#coupon-form");
 
-  validation
-    .onSuccess((event) => {
-      const coupon = event.target.coupon.value;
-      console.log(coupon);
-    });
+  validation.onSuccess((event) => {
+    const coupon = event.target.coupon.value;
+    console.log(coupon);
+  });
 }
 // End Email Form
 
 // Order Form
 const orderForm = document.querySelector("#order-form");
 if (orderForm) {
-  const validation = new JustValidate('#order-form');
+  const validation = new JustValidate("#order-form");
 
   validation
-    .addField('#full-name-input', [{
-        rule: 'required',
-        errorMessage: 'Vui lòng nhập họ tên!'
+    .addField("#full-name-input", [
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập họ tên!",
       },
       {
-        rule: 'minLength',
+        rule: "minLength",
         value: 5,
-        errorMessage: 'Họ tên phải có ít nhất 5 ký tự!',
+        errorMessage: "Họ tên phải có ít nhất 5 ký tự!",
       },
       {
-        rule: 'maxLength',
+        rule: "maxLength",
         value: 50,
-        errorMessage: 'Họ tên không được vượt quá 50 ký tự!',
+        errorMessage: "Họ tên không được vượt quá 50 ký tự!",
       },
     ])
-    .addField('#phone-input', [{
-        rule: 'required',
-        errorMessage: 'Vui lòng nhập số điện thoại!'
+    .addField("#phone-input", [
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập số điện thoại!",
       },
       {
-        rule: 'customRegexp',
+        rule: "customRegexp",
         value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
-        errorMessage: 'Số điện thoại không đúng định dạng!'
+        errorMessage: "Số điện thoại không đúng định dạng!",
       },
     ])
     .onSuccess((event) => {
@@ -376,15 +394,15 @@ if (orderForm) {
   const listInputMethod = orderForm.querySelectorAll("input[name='method']");
   const elementInfoBank = orderForm.querySelector(".inner-info-bank");
 
-  listInputMethod.forEach(inputMethod => {
+  listInputMethod.forEach((inputMethod) => {
     inputMethod.addEventListener("change", () => {
       if (inputMethod.value == "bank") {
         elementInfoBank.classList.add("active");
       } else {
         elementInfoBank.classList.remove("active");
       }
-    })
-  })
+    });
+  });
   // End List Input Method
 }
 // End Order Form
@@ -410,22 +428,21 @@ if (boxFilter) {
     "stockAdult",
     "stockChildren",
     "stockBaby",
-    "price"
-  ]
+    "price",
+  ];
   buttonApply.addEventListener("click", () => {
-    filterList.forEach(item => {
+    filterList.forEach((item) => {
       const value = boxFilter.querySelector(`[name="${item}"]`).value;
       if (value) {
         url.searchParams.set(item, value);
       } else {
         url.searchParams.delete(item);
       }
-    })
+    });
     window.location.href = url.href;
-  })
+  });
 }
 //End Box Filter
-
 
 //Form search
 const formSearch = document.querySelector("[form-search]");
@@ -441,21 +458,27 @@ if (formSearch) {
       url.searchParams.delete("locationTo");
     }
     //Số lượng
-    const stockAdult = parseInt(formSearch.querySelector("[stock-adult]").innerHTML);
+    const stockAdult = parseInt(
+      formSearch.querySelector("[stock-adult]").innerHTML
+    );
     if (stockAdult > 0) {
       url.searchParams.set("stockAdult", stockAdult);
     } else {
       url.searchParams.delete("stockAdult");
     }
 
-    const stockChildren = parseInt(formSearch.querySelector("[stock-children]").innerHTML);
+    const stockChildren = parseInt(
+      formSearch.querySelector("[stock-children]").innerHTML
+    );
     if (stockChildren > 0) {
       url.searchParams.set("stockChildren", stockChildren);
     } else {
       url.searchParams.delete("stockChildren");
     }
 
-    const stockBaby = parseInt(formSearch.querySelector("[stock-baby]").innerHTML);
+    const stockBaby = parseInt(
+      formSearch.querySelector("[stock-baby]").innerHTML
+    );
     if (stockChildren > 0) {
       url.searchParams.set("stockBaby", stockBaby);
     } else {
@@ -470,8 +493,7 @@ if (formSearch) {
     }
 
     window.location.href = url.href;
-
-  })
+  });
 }
 //End Form search
 
@@ -498,24 +520,27 @@ if (boxTourDetail) {
     const priceAdult = parseInt(inputStockAdult.getAttribute("price"));
     const priceChildren = parseInt(inputStockChildren.getAttribute("price"));
     const priceBaby = parseInt(inputStockBaby.getAttribute("price"));
-    const totalPrice = (quantityAdult * priceAdult) + (quantityChildren * priceChildren) + (quantityBaby * priceBaby);;
+    const totalPrice =
+      quantityAdult * priceAdult +
+      quantityChildren * priceChildren +
+      quantityBaby * priceBaby;
 
     const elementTotalPrice = document.querySelector("[total-price]");
     elementTotalPrice.innerHTML = totalPrice.toLocaleString("vi-VN");
-  }
+  };
   //B2 sử lý sự kiện change
   inputStockAdult.addEventListener("change", drawBoxDetail);
   inputStockChildren.addEventListener("change", drawBoxDetail);
   inputStockBaby.addEventListener("change", drawBoxDetail);
 
-  //Bước 4 
+  //Bước 4
   const buttonAddToCart = boxTourDetail.querySelector(".inner-button-add-cart");
   buttonAddToCart.addEventListener("click", () => {
     const tourId = buttonAddToCart.getAttribute("tour-id");
     const quantityAdult = parseInt(inputStockAdult.value);
     const quantityChildren = parseInt(inputStockChildren.value);
     const quantityBaby = parseInt(inputStockBaby.value);
-    const locationFrom = boxTourDetail.querySelector("[location-from]").value;
+    const locationFrom = boxTourDetail.querySelector("select[location-from]").value;
 
     if (quantityAdult > 0 || quantityChildren > 0 || quantityBaby > 0) {
       const cartItem = {
@@ -523,12 +548,12 @@ if (boxTourDetail) {
         quantityAdult: quantityAdult,
         quantityChildren: quantityChildren,
         quantityBaby: quantityBaby,
-        locationFrom: locationFrom
-      }
-
+        locationFrom: locationFrom,
+      };
+      
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const indexItemExist = cart.findIndex(item => item.tourId == tourId);
+      const indexItemExist = cart.findIndex((item) => item.tourId == tourId);
       if (indexItemExist != -1) {
         cart[indexItemExist] = cartItem;
       } else {
@@ -537,15 +562,13 @@ if (boxTourDetail) {
 
       localStorage.setItem("cart", JSON.stringify(cart));
       window.location.href = "/cart";
-
     }
-
-  })
+  });
 }
 //End Box tourDetail
 
 //Mini cart
-const miniCart = document.querySelector("[mini-cart]")
+const miniCart = document.querySelector("[mini-cart]");
 if (miniCart) {
   const cart = JSON.parse(localStorage.getItem("cart"));
   miniCart.innerHTML = cart.length;
@@ -553,21 +576,22 @@ if (miniCart) {
 //End Mini cart
 // page-cart
 const drawCart = () => {
-//lấy giỏ hàng từ localStorage
-const cart = localStorage.getItem("cart");
+  //lấy giỏ hàng từ localStorage
+  const cart = localStorage.getItem("cart");
 
   fetch(`/cart/detail`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: cart
+    body: cart,
   })
-  .then(res => res.json())
-  .then(data => {
-    if (data.code == "success") {
-      const htmlCart = data.cart.map(item =>
-        `<div class="inner-tour-item">
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.code == "success") {
+        const htmlCart = data.cart.map(
+          (item) =>
+            `<div class="inner-tour-item">
           <div class="inner-actions">
               <button class="inner-delete"><i class="fa-solid fa-xmark"></i></button>
               <input class="inner-check" type="checkbox">
@@ -598,7 +622,13 @@ const cart = localStorage.getItem("cart");
                   <div class="inner-item">
                       <div class="inner-item-label">Người lớn:</div>
                       <div class="inner-item-input">
-                          <input value="${item.quantityAdult}" min="0" type="number">
+                          <input 
+                            value="${item.quantityAdult}" 
+                            min="0" 
+                            type="number"
+                            input-quantity="quantityAdult"
+                            tour-id="${item.tourId}"
+                          >
                       </div>
                       <div class="inner-item-price">
                         <span>${item.quantityAdult}</span>
@@ -611,7 +641,13 @@ const cart = localStorage.getItem("cart");
                   <div class="inner-item">
                       <div class="inner-item-label">Trẻ em:</div>
                       <div class="inner-item-input">
-                          <input value="${item.quantityChildren}" min="0" type="number">
+                          <input 
+                            value="${item.quantityChildren}" 
+                            min="0" 
+                            type="number"
+                            input-quantity="quantityChildren"
+                            tour-id="${item.tourId}"
+                          >
                       </div>
                       <div class="inner-item-price">
                         <span>${item.quantityChildren}</span>
@@ -624,7 +660,13 @@ const cart = localStorage.getItem("cart");
                   <div class="inner-item">
                       <div class="inner-item-label">Em bé:</div>
                       <div class="inner-item-input">
-                          <input value="${item.quantityBaby}" min="0" type="number">
+                          <input 
+                            value="${item.quantityBaby}" 
+                            min="0" 
+                            type="number"
+                            input-quantity="quantityBaby"
+                            tour-id="${item.tourId}"
+                          >
                       </div>
                       <div class="inner-item-price">
                         <span>${item.quantityBaby}</span>
@@ -637,31 +679,53 @@ const cart = localStorage.getItem("cart");
               </div>
           </div>
       </div>`
-      )
-      const cartList = document.querySelector("[cart-list]");
-      cartList.innerHTML = htmlCart.join("");
-      // hết hiển thị item-cart
-      //cập nhật giỏ hàng
-      localStorage.setItem("cart",JSON.stringify(data.cart));
-      miniCart.innerHTML = data.cart.length;
+        );
+        const cartList = document.querySelector("[cart-list]");
+        cartList.innerHTML = htmlCart.join("");
+        // hết hiển thị item-cart
+        //cập nhật giỏ hàng
+        localStorage.setItem("cart", JSON.stringify(data.cart));
+        miniCart.innerHTML = data.cart.length;
 
-      //tính tổng tiền
-      const subTotalPrice = data.cart.reduce((sum, item) => {
-        return sum + ((item.priceNewAdult * item.quantityAdult) + (item.priceNewChildren * item.quantityChildren) + (item.priceNewBaby * item.quantityBaby));
-      },0);
-      const discount = 0;
-      const totalPrice = subTotalPrice - discount;
-      const cartSubTotal =  document.querySelector("[cart-sub-total]");
-      cartSubTotal.innerHTML = subTotalPrice.toLocaleString("vi-VN");
-      const cartTotal = document.querySelector("[cart-total]");
+        //tính tổng tiền
+        const subTotalPrice = data.cart.reduce((sum, item) => {
+          return (
+            sum +
+            (item.priceNewAdult * item.quantityAdult +
+              item.priceNewChildren * item.quantityChildren +
+              item.priceNewBaby * item.quantityBaby)
+          );
+        }, 0);
+        const discount = 0;
+        const totalPrice = subTotalPrice - discount;
+        const cartSubTotal = document.querySelector("[cart-sub-total]");
+        cartSubTotal.innerHTML = subTotalPrice.toLocaleString("vi-VN");
+        const cartTotal = document.querySelector("[cart-total]");
 
-      cartTotal.innerHTML = totalPrice.toLocaleString("vi-VN");
-    }
+        cartTotal.innerHTML = totalPrice.toLocaleString("vi-VN");
+        // Hết Tính tổng tiền
+        //Cập nhật số lượng
+        const listInputQuantity = document.querySelectorAll("[input-quantity]");
+        listInputQuantity.forEach(input => {
+          input.addEventListener("change",() => {
+            const tourId = input.getAttribute("tour-id");
+            const name = input.getAttribute("input-quantity");
+            const quantity = parseInt(input.value);
+            const cart = JSON.parse(localStorage.getItem("cart"));
+            const itemUpdate = cart.find(item => item.tourId == tourId);
+            itemUpdate[name] = quantity;
+            localStorage.setItem("cart",JSON.stringify(cart));
+            drawCart();
+          })
+        })
+        //End cập nhật số lượng
 
-})
-}
+
+      }
+    });
+};
 const pageCart = document.querySelector("[page-cart]");
-if(pageCart) {
+if (pageCart) {
   drawCart();
 }
 

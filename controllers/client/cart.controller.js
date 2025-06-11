@@ -10,6 +10,7 @@ module.exports.cart = (req, res) => {
 module.exports.detail = async(req, res) => {
   
   const cart = req.body;
+  console.log(cart.locationFrom);
   for(const item of cart){
       const tourInfo = await Tour.findOne({
         _id:item.tourId,
@@ -29,7 +30,7 @@ module.exports.detail = async(req, res) => {
         const city = await City.findOne({
           _id:item.locationFrom
         });
-        item.locationFrom = city.name
+        item.locationFromName = city.name
       }
       else{
         //nếu không lấy được tour thì xóa tour khỏi giỏ hàng
