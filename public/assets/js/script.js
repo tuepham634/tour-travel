@@ -425,7 +425,7 @@ if (orderForm) {
               cart = cart.filter(item => item.checked == false);
               localStorage.setItem("cart",JSON.stringify(cart));
               //chuyển hướng sang trang đặt hàng thành công
-              window.location.href = `/order/success`;
+              window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`;
             }
           })
 

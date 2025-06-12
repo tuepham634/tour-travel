@@ -75,7 +75,8 @@ module.exports.createPost = async (req, res) => {
 
     res.json({
       code: "success",
-      message: "Đặt hàng thành công"
+      message: "Đặt hàng thành công",
+      orderId:newOrder.id
     });
   } catch (error) {
     res.json({
@@ -84,3 +85,9 @@ module.exports.createPost = async (req, res) => {
     });
   }
 };
+
+module.exports.success = (req, res) => {
+  res.render("client/pages/order-success", {
+    pageTitle: "Đặt hàng thành công"
+  });
+}
