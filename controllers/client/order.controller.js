@@ -1,9 +1,13 @@
 const Tour = require("../../models/tour.model");
 const Order = require("../../models/order.model");
+const variableHelper = require("../../config/variable");
+const gererateHelper = require("../../helpers/generate.helper");
+
+const moment = require("moment");
+const City = require("../../models/city.model");
 
 module.exports.createPost = async (req, res) => {
   try {
-    console.log(req.body.items);
     // Danh sách tour
     for (const item of req.body.items) {
       const infoTour = await Tour.findOne({
@@ -24,9 +28,9 @@ module.exports.createPost = async (req, res) => {
         item.name = infoTour.name;
         // Cập nhật lại số lượng còn lại của tour
         if (
-          infoTour.stockAdult < item.quantityAdult  ||
-          infoTour.stockChildren < item.quantityChildren  ||
-          infoTour.stockBaby < item.quantityBaby 
+          infoTour.stockAdult < item.quantityAdult ||
+          infoTour.stockChildren < item.quantityChildren ||
+          infoTour.stockBaby < item.quantityBaby
         ) {
           res.json({
             code: "error",
@@ -50,44 +54,94 @@ module.exports.createPost = async (req, res) => {
 
     // Thanh toán
     // Tạm tính
-    req.body.Subtotal = req.body.items.reduce((sum, item) => {
+    req.body.subTotal = req.body.items.reduce((sum, item) => {
       return (
         sum +
-        ((item.priceNewAdult * item.quantityAdult) +
-          (item.priceNewChildren * item.quantityChildren) + 
-          (item.priceNewBaby * item.quantityBaby)
-        )
+        (item.priceNewAdult * item.quantityAdult +
+          item.priceNewChildren * item.quantityChildren +
+          item.priceNewBaby * item.quantityBaby)
       );
-    },0);
+    }, 0);
     // Giảm
     req.body.discount = 0;
     // Thanh toán
-    req.body.total = req.body.Subtotal - req.body.discount;
+    req.body.total = req.body.subTotal - req.body.discount;
     // Trạng thái thanh toán
-    req.body.paymentsStatus = "unpaid";
+    req.body.paymentStatus = "unpaid";
 
     // Trạng thái đơn hàng
     req.body.status = "initial";
 
-    console.log(req.body);
     const newOrder = new Order(req.body);
     await newOrder.save();
 
     res.json({
       code: "success",
       message: "Đặt hàng thành công",
-      orderId:newOrder.id
+      orderId: newOrder.id,
     });
   } catch (error) {
     res.json({
       code: "error",
-      message: "Đặt hàng thất bại"
+      message: "Đặt hàng thất bại",
     });
   }
 };
 
-module.exports.success = (req, res) => {
-  res.render("client/pages/order-success", {
-    pageTitle: "Đặt hàng thành công"
-  });
-}
+module.exports.success = async (req, res) => {
+  try {
+    const { orderId, phone } = req.query;
+    const orderDetail = await Order.findOne({
+      _id: orderId,
+      phone: phone,
+    });
+    if (!orderDetail) {
+      res.redirect("/");
+      return;
+    }
+    orderDetail.paymentMethodName = variableHelper.paymentMethod.find(
+      (item) => item.value == orderDetail.paymentMethod
+    ).label;
+
+    orderDetail.paymentStatusName = variableHelper.paymentStatus.find(
+      (item) => item.value == orderDetail.paymentStatus
+    ).label;
+
+
+    orderDetail.statusName = variableHelper.orderStatus.find(
+      (item) => item.value == orderDetail.status
+    ).label;
+
+    orderDetail.createdAtFormat = moment(orderDetail.createdAt).format(
+      "HH:mm-DD/MM/YYYY"
+    );
+
+    for (const item of orderDetail.items) {
+      const infoTour = await Tour.findOne({
+        _id: item.tourId,
+        deleted: false,
+      });
+      if (infoTour) {
+        item.slug = infoTour.slug;
+      }
+      item.departureDateFormat = moment(item.departureDate).format(
+        "DD/MM/YYYY"
+      );
+
+      const city = await City.findOne({
+        _id: item.locationFrom,
+      });
+      if (city) {
+        item.locationFromName = city.name;
+      }
+    }
+    console.log(orderDetail);
+    res.render("client/pages/order-success", {
+      pageTitle: "Đặt hàng thành công",
+      orderDetail: orderDetail,
+    });
+  } catch (error) {
+    console.error("Lỗi hiển thị trang success:", error); // Thêm dòng này
+    res.redirect("/");
+  }
+};
