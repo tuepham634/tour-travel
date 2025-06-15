@@ -1,6 +1,6 @@
 const Tour = require("../../models/tour.model");
 const Order = require("../../models/order.model");
-const variableHelper = require("../../config/variable");
+const variableConfig = require("../../config/variable");
 const gererateHelper = require("../../helpers/generate.helper");
 
 const moment = require("moment");
@@ -8,6 +8,7 @@ const City = require("../../models/city.model");
 
 module.exports.createPost = async (req, res) => {
   try {
+     req.body.orderCode = "OD" + gererateHelper.generateRandomNumber(10);
     // Danh sách tour
     for (const item of req.body.items) {
       const infoTour = await Tour.findOne({
@@ -99,16 +100,16 @@ module.exports.success = async (req, res) => {
       res.redirect("/");
       return;
     }
-    orderDetail.paymentMethodName = variableHelper.paymentMethod.find(
+    orderDetail.paymentMethodName = variableConfig.paymentMethod.find(
       (item) => item.value == orderDetail.paymentMethod
     ).label;
 
-    orderDetail.paymentStatusName = variableHelper.paymentStatus.find(
+    orderDetail.paymentStatusName = variableConfig.paymentStatus.find(
       (item) => item.value == orderDetail.paymentStatus
     ).label;
 
 
-    orderDetail.statusName = variableHelper.orderStatus.find(
+    orderDetail.statusName = variableConfig.orderStatus.find(
       (item) => item.value == orderDetail.status
     ).label;
 

@@ -107,36 +107,40 @@ if (listFilepondImage.length > 0) {
 }
 // End Filepond Image
 // Filepond Image Multi
-const listFilepondImageMulti = document.querySelectorAll("[filepond-image-multi]");
+const listFilepondImageMulti = document.querySelectorAll(
+  "[filepond-image-multi]"
+);
 let filePondMulti = {};
-if(listFilepondImageMulti.length > 0) {
-  listFilepondImageMulti.forEach(filepondImage => {
+if (listFilepondImageMulti.length > 0) {
+  listFilepondImageMulti.forEach((filepondImage) => {
     FilePond.registerPlugin(FilePondPluginImagePreview);
     FilePond.registerPlugin(FilePondPluginFileValidateType);
 
     let files = null;
-    const elementListImageDefault = filepondImage.closest("[list-image-default]");
-    if(elementListImageDefault) {
-      let listImageDefault = elementListImageDefault.getAttribute("list-image-default");
-      if(listImageDefault) {
+    const elementListImageDefault = filepondImage.closest(
+      "[list-image-default]"
+    );
+    if (elementListImageDefault) {
+      let listImageDefault =
+        elementListImageDefault.getAttribute("list-image-default");
+      if (listImageDefault) {
         listImageDefault = JSON.parse(listImageDefault);
         files = [];
-        listImageDefault.forEach(image => {
+        listImageDefault.forEach((image) => {
           files.push({
             source: image, // Đường dẫn ảnh
           });
-        })
+        });
       }
     }
 
     filePondMulti[filepondImage.name] = FilePond.create(filepondImage, {
-      labelIdle: '+',
+      labelIdle: "+",
       files: files,
     });
   });
 }
 // End Filepond Image Multi
-
 
 // Biểu đồ doanh thu
 const revenueChart = document.querySelector("#revenue-chart");
@@ -360,48 +364,47 @@ if (tourCreateForm) {
       // End schedules
       //Tạo formData
       const formData = new FormData();
-      formData.append("name",name),
-      formData.append("category",category),
-      formData.append("position",position),
-      formData.append("status",status),
-      formData.append("avatar",avatar),
-      formData.append("priceAdult",priceAdult),
-      formData.append("priceChildren",priceChildren),
-      formData.append("priceBaby",priceBaby),
-      formData.append("priceNewAdult",priceNewAdult),
-      formData.append("priceNewChildren",priceNewChildren),
-      formData.append("priceNewBaby",priceNewBaby),
-      formData.append("stockAdult",stockAdult),
-      formData.append("stockChildren",stockChildren),
-      formData.append("stockBaby",stockBaby),
-      formData.append("locations",JSON.stringify(locations)),
-      formData.append("time",time),
-      formData.append("vehicle",vehicle),
-      formData.append("departureDate",departureDate),
-      formData.append("information",information),
-      formData.append("schedules",JSON.stringify(schedules))
+      formData.append("name", name),
+        formData.append("category", category),
+        formData.append("position", position),
+        formData.append("status", status),
+        formData.append("avatar", avatar),
+        formData.append("priceAdult", priceAdult),
+        formData.append("priceChildren", priceChildren),
+        formData.append("priceBaby", priceBaby),
+        formData.append("priceNewAdult", priceNewAdult),
+        formData.append("priceNewChildren", priceNewChildren),
+        formData.append("priceNewBaby", priceNewBaby),
+        formData.append("stockAdult", stockAdult),
+        formData.append("stockChildren", stockChildren),
+        formData.append("stockBaby", stockBaby),
+        formData.append("locations", JSON.stringify(locations)),
+        formData.append("time", time),
+        formData.append("vehicle", vehicle),
+        formData.append("departureDate", departureDate),
+        formData.append("information", information),
+        formData.append("schedules", JSON.stringify(schedules));
       // images
-      if(filePondMulti.images.getFiles().length > 0) {
-        filePondMulti.images.getFiles().forEach(item => {
+      if (filePondMulti.images.getFiles().length > 0) {
+        filePondMulti.images.getFiles().forEach((item) => {
           formData.append("images", item.file);
-        })
+        });
       }
       // End images
 
-       
-      fetch(`/${pathAdmin}/tour/create`,{
-        method:"POST",
-        body:formData
+      fetch(`/${pathAdmin}/tour/create`, {
+        method: "POST",
+        body: formData,
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "error") {
-          alert(data.message);
-        }
-        if(data.code == "success"){
-          window.location.href = `/${pathAdmin}/tour/list`
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.href = `/${pathAdmin}/tour/list`;
+          }
+        });
     });
 }
 // End Tour Create Form
@@ -425,13 +428,14 @@ if (tourEditForm) {
       const status = event.target.status.value;
       const avatars = filePond.avatar.getFiles();
       let avatar = null;
-      if(avatars.length > 0) {
-              avatar = avatars[0].file;
-              const elementImageDefault = event.target.avatar.closest("[image-default]");
-              const imageDefault = elementImageDefault.getAttribute("image-default");
-              if(imageDefault.includes(avatar.name)) {
-                avatar = null;
-              }
+      if (avatars.length > 0) {
+        avatar = avatars[0].file;
+        const elementImageDefault =
+          event.target.avatar.closest("[image-default]");
+        const imageDefault = elementImageDefault.getAttribute("image-default");
+        if (imageDefault.includes(avatar.name)) {
+          avatar = null;
+        }
       }
       const priceAdult = event.target.priceAdult.value;
       const priceChildren = event.target.priceChildren.value;
@@ -478,47 +482,47 @@ if (tourEditForm) {
       // End schedules
       //Tạo formData
       const formData = new FormData();
-      formData.append("name",name),
-      formData.append("category",category),
-      formData.append("position",position),
-      formData.append("status",status),
-      formData.append("avatar",avatar),
-      formData.append("priceAdult",priceAdult),
-      formData.append("priceChildren",priceChildren),
-      formData.append("priceBaby",priceBaby),
-      formData.append("priceNewAdult",priceNewAdult),
-      formData.append("priceNewChildren",priceNewChildren),
-      formData.append("priceNewBaby",priceNewBaby),
-      formData.append("stockAdult",stockAdult),
-      formData.append("stockChildren",stockChildren),
-      formData.append("stockBaby",stockBaby),
-      formData.append("locations",JSON.stringify(locations)),
-      formData.append("time",time),
-      formData.append("vehicle",vehicle),
-      formData.append("departureDate",departureDate),
-      formData.append("information",information),
-      formData.append("schedules",JSON.stringify(schedules))
-             // images
-      if(filePondMulti.images.getFiles().length > 0) {
-        filePondMulti.images.getFiles().forEach(item => {
+      formData.append("name", name),
+        formData.append("category", category),
+        formData.append("position", position),
+        formData.append("status", status),
+        formData.append("avatar", avatar),
+        formData.append("priceAdult", priceAdult),
+        formData.append("priceChildren", priceChildren),
+        formData.append("priceBaby", priceBaby),
+        formData.append("priceNewAdult", priceNewAdult),
+        formData.append("priceNewChildren", priceNewChildren),
+        formData.append("priceNewBaby", priceNewBaby),
+        formData.append("stockAdult", stockAdult),
+        formData.append("stockChildren", stockChildren),
+        formData.append("stockBaby", stockBaby),
+        formData.append("locations", JSON.stringify(locations)),
+        formData.append("time", time),
+        formData.append("vehicle", vehicle),
+        formData.append("departureDate", departureDate),
+        formData.append("information", information),
+        formData.append("schedules", JSON.stringify(schedules));
+      // images
+      if (filePondMulti.images.getFiles().length > 0) {
+        filePondMulti.images.getFiles().forEach((item) => {
           formData.append("images", item.file);
-        })
+        });
       }
       // End images
 
-      fetch(`/${pathAdmin}/tour/edit/${id}`,{
-        method:"PATCH",
-        body:formData
+      fetch(`/${pathAdmin}/tour/edit/${id}`, {
+        method: "PATCH",
+        body: formData,
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "error") {
-          alert("Cập nhật lỗi");
-        }
-        if(data.code == "success"){
-          window.location.href = `/${pathAdmin}/tour/list`
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert("Cập nhật lỗi");
+          }
+          if (data.code == "success") {
+            window.location.href = `/${pathAdmin}/tour/list`;
+          }
+        });
     });
 }
 // end tour edit form
@@ -557,6 +561,7 @@ if (orderEditForm) {
       },
     ])
     .onSuccess((event) => {
+      const id = event.target.id.value;
       const fullName = event.target.fullName.value;
       const phone = event.target.phone.value;
       const note = event.target.note.value;
@@ -564,12 +569,32 @@ if (orderEditForm) {
       const paymentStatus = event.target.paymentStatus.value;
       const status = event.target.status.value;
 
-      console.log(fullName);
-      console.log(phone);
-      console.log(note);
-      console.log(paymentMethod);
-      console.log(paymentStatus);
-      console.log(status);
+      const dataFinal = {
+        fullName: fullName,
+        phone: phone,
+        note: note,
+        paymentMethod: paymentMethod,
+        paymentStatus: paymentStatus,
+        status: status,
+      };
+
+      fetch(`/${pathAdmin}/order/edit/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataFinal),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+
+          if (data.code == "success") {
+            window.location.reload();
+          }
+        });
     });
 }
 // End Order Edit Form
@@ -603,9 +628,10 @@ if (settingWebsiteInfoForm) {
       let logo = null;
       if (logos.length > 0) {
         logo = logos[0].file;
-        const elementImageDefault = event.target.logo.closest("[image-default]");
+        const elementImageDefault =
+          event.target.logo.closest("[image-default]");
         const imageDefault = elementImageDefault.getAttribute("image-default");
-        if(imageDefault.includes(logo.name)) {
+        if (imageDefault.includes(logo.name)) {
           logo = null;
         }
       }
@@ -613,33 +639,34 @@ if (settingWebsiteInfoForm) {
       let favicon = null;
       if (favicons.length > 0) {
         favicon = favicons[0].file;
-        const elementImageDefault = event.target.favicon.closest("[image-default]");
+        const elementImageDefault =
+          event.target.favicon.closest("[image-default]");
         const imageDefault = elementImageDefault.getAttribute("image-default");
-        if(imageDefault.includes(favicon.name)) {
+        if (imageDefault.includes(favicon.name)) {
           favicon = null;
         }
       }
       const formData = new FormData();
-      formData.append("websiteName",websiteName);
-      formData.append("phone",phone);
-      formData.append("email",email);
-      formData.append("address",address);
-      formData.append("logo",logo);
-      formData.append("favicon",favicon);
+      formData.append("websiteName", websiteName);
+      formData.append("phone", phone);
+      formData.append("email", email);
+      formData.append("address", address);
+      formData.append("logo", logo);
+      formData.append("favicon", favicon);
 
-      fetch(`/${pathAdmin}/setting/website-info`,{
-        method:"PATCH",
-        body:formData
+      fetch(`/${pathAdmin}/setting/website-info`, {
+        method: "PATCH",
+        body: formData,
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "error"){
-          alert(data.message)
-        }
-        if(data.code == "success"){
-          window.location.reload();
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.reload();
+          }
+        });
     });
 }
 // End Setting Website Info Form
@@ -736,29 +763,28 @@ if (settingAccountAdminCreateForm) {
       }
 
       const formData = new FormData();
-      formData.append("fullName",fullName);
-      formData.append("email",email);
-      formData.append("phone",phone);
-      formData.append("role",role);
-      formData.append("positionCompany",positionCompany);
-      formData.append("status",status);
-      formData.append("password",password);
-      formData.append("avatar",avatar);
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("role", role);
+      formData.append("positionCompany", positionCompany);
+      formData.append("status", status);
+      formData.append("password", password);
+      formData.append("avatar", avatar);
 
-
-      fetch(`/${pathAdmin}/setting/account-admin/create`,{
-        method:"POST",
-        body:formData
+      fetch(`/${pathAdmin}/setting/account-admin/create`, {
+        method: "POST",
+        body: formData,
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "error"){
-          alert(data.message);
-        }
-        if(data.code == "success"){
-          window.location.href = `/${pathAdmin}/setting/account-admin/list`
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.href = `/${pathAdmin}/setting/account-admin/list`;
+          }
+        });
     });
 }
 // End Setting Account Admin Create Form
@@ -836,7 +862,7 @@ if (settingAccountAdminEditForm) {
       },
     ])
     .onSuccess((event) => {
-      const id = event.target.id.value
+      const id = event.target.id.value;
       const fullName = event.target.fullName.value;
       const email = event.target.email.value;
       const phone = event.target.phone.value;
@@ -848,40 +874,39 @@ if (settingAccountAdminEditForm) {
       let avatar = null;
       if (avatars.length > 0) {
         avatar = avatars[0].file;
-        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        const elementImageDefault =
+          event.target.avatar.closest("[image-default]");
         const imageDefault = elementImageDefault.getAttribute("image-default");
-        if(imageDefault.includes(avatar.name)) {
+        if (imageDefault.includes(avatar.name)) {
           avatar = null;
         }
-
       }
 
       const formData = new FormData();
-      formData.append("fullName",fullName);
-      formData.append("email",email);
-      formData.append("phone",phone);
-      formData.append("role",role);
-      formData.append("positionCompany",positionCompany);
-      formData.append("status",status);
-      if(password) {
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("role", role);
+      formData.append("positionCompany", positionCompany);
+      formData.append("status", status);
+      if (password) {
         formData.append("password", password);
       }
-      formData.append("avatar",avatar);
+      formData.append("avatar", avatar);
 
-
-      fetch(`/${pathAdmin}/setting/account-admin/edit/${id}`,{
-        method:"PATCH",
-        body:formData
+      fetch(`/${pathAdmin}/setting/account-admin/edit/${id}`, {
+        method: "PATCH",
+        body: formData,
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "error"){
-          alert(data.message);
-        }
-        if(data.code == "success"){
-          window.location.reload();
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.reload();
+          }
+        });
     });
 }
 //  End Setting Account Admin Edit Form
@@ -913,35 +938,33 @@ if (settingRoleCreateForm) {
       });
       // End permissions
       const dataFinal = {
-        name:name,
-        description:description,
-        permissions:permissions
+        name: name,
+        description: description,
+        permissions: permissions,
       };
 
-      fetch(`/${pathAdmin}/setting/role/create`,{
-        method:"POST",
-        headers:{
-          "Content-Type" : "application/json"
+      fetch(`/${pathAdmin}/setting/role/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataFinal)
+        body: JSON.stringify(dataFinal),
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code== "error"){
-          alert(data.message);
-        }
-        if(data.code== "success"){
-          window.location.href = `/${pathAdmin}/setting/role/list`
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.href = `/${pathAdmin}/setting/role/list`;
+          }
+        });
     });
 }
 // End Setting Role Create Form
 
 // Setting Role edit Form
-const settingRoleEditForm = document.querySelector(
-  "#setting-role-edit-form"
-);
+const settingRoleEditForm = document.querySelector("#setting-role-edit-form");
 if (settingRoleEditForm) {
   const validation = new JustValidate("#setting-role-edit-form");
 
@@ -952,7 +975,7 @@ if (settingRoleEditForm) {
         errorMessage: "Vui lòng nhập tên nhóm quyền!",
       },
     ])
-    .onSuccess((event) => { 
+    .onSuccess((event) => {
       const id = event.target.id.value;
       const name = event.target.name.value;
       const description = event.target.description.value;
@@ -967,29 +990,28 @@ if (settingRoleEditForm) {
       });
       // End permissions
       const dataFinal = {
-        id:id,
-        name:name,
-        description:description,
-        permissions:permissions
+        id: id,
+        name: name,
+        description: description,
+        permissions: permissions,
       };
 
-
-      fetch(`/${pathAdmin}/setting/role/edit/${id}`,{
-        method:"PATCH",
-        headers:{
+      fetch(`/${pathAdmin}/setting/role/edit/${id}`, {
+        method: "PATCH",
+        headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataFinal)
+        body: JSON.stringify(dataFinal),
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code== "error"){
-          alert(data.message);
-        }
-        if(data.code== "success"){
-          window.location.href = `/${pathAdmin}/setting/role/list`;
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.href = `/${pathAdmin}/setting/role/list`;
+          }
+        });
     });
 }
 // End Setting Role edit Form
@@ -1044,32 +1066,32 @@ if (profileEditForm) {
       let avatar = null;
       if (avatars.length > 0) {
         avatar = avatars[0].file;
-        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        const elementImageDefault =
+          event.target.avatar.closest("[image-default]");
         const imageDefault = elementImageDefault.getAttribute("image-default");
-        if(imageDefault.includes(avatar.name)) {
+        if (imageDefault.includes(avatar.name)) {
           avatar = null;
         }
-
       }
       const formData = new FormData();
-      formData.append("fullName",fullName);
-      formData.append("email",email);
-      formData.append("phone",phone);
-      formData.append("avatar",avatar);
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("avatar", avatar);
 
-      fetch(`/${pathAdmin}/profile/edit`,{
-        method:"PATCH",
-        body:formData
+      fetch(`/${pathAdmin}/profile/edit`, {
+        method: "PATCH",
+        body: formData,
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "error"){
-          alert(data.message)
-        }
-        if(data.code == "success"){
-          window.location.reload();
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.reload();
+          }
+        });
     });
 }
 // End Profile Edit Form
@@ -1125,24 +1147,24 @@ if (profileChangePasswordForm) {
       const password = event.target.password.value;
 
       const dataFinal = {
-        password:password
-      }
-      fetch(`/${pathAdmin}/profile/change-password`,{
-        method:"PATCH",
-        headers:{
-          "Content-Type": "application/json"
+        password: password,
+      };
+      fetch(`/${pathAdmin}/profile/change-password`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataFinal)
+        body: JSON.stringify(dataFinal),
       })
-      .then(res => res.json())
-      .then(data =>{
-        if(data.code == "error"){
-          alert(data.message)
-        }
-        if(data.code == "success"){
-          window.location.reload();
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            alert(data.message);
+          }
+          if (data.code == "success") {
+            window.location.reload();
+          }
+        });
     });
 }
 // End Profile Change Password Form
@@ -1346,8 +1368,6 @@ if (filterPrice) {
 }
 //filter-price
 
-
-
 // Filter reset
 const filterReset = document.querySelector("[filter-reset]");
 if (filterReset) {
@@ -1415,43 +1435,41 @@ if (changeMulti) {
 // End Change multi
 // Search
 const search = document.querySelector("[search]");
-if(search){
+if (search) {
   const url = new URL(window.location.href);
-  search.addEventListener("keyup",(event) => {
-    if(event.code == "Enter"){
-      const value = search.value
-      if(value){
-        url.searchParams.set("keyword",value.trim());
-      }else{
-        url.searchParams.delete("keyword")
+  search.addEventListener("keyup", (event) => {
+    if (event.code == "Enter") {
+      const value = search.value;
+      if (value) {
+        url.searchParams.set("keyword", value.trim());
+      } else {
+        url.searchParams.delete("keyword");
       }
 
-      window.location.href = url.href
+      window.location.href = url.href;
     }
-  })
+  });
   const valueCurrent = url.searchParams.get("keyword");
-  if(valueCurrent){
+  if (valueCurrent) {
     search.value = valueCurrent;
   }
-  
 }
 // End Search
 // pagination
 const pagination = document.querySelector("[pagination]");
-if(pagination){
+if (pagination) {
   const url = new URL(window.location.href);
   pagination.addEventListener("change", () => {
     const value = pagination.value;
-    if(value){
-      url.searchParams.set("page",value);
-    }
-    else {
+    if (value) {
+      url.searchParams.set("page", value);
+    } else {
       url.searchParams.delete("page");
     }
     window.location.href = url.href;
-  })
+  });
   const valueCurrent = url.searchParams.get("page");
-  if(valueCurrent){
+  if (valueCurrent) {
     pagination.value = valueCurrent;
   }
 }
