@@ -59,7 +59,7 @@ module.exports.dashboard = async (req, res) => {
         "DD/MM/YYYY"
       );
     }
-  console.log(orderListNew);
+  // console.log(orderListNew);
   res.render("Admin/pages/dashboard", {
     pageTitle: "Tổng Quan",
     overview: overview,
