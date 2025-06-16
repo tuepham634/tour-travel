@@ -424,8 +424,18 @@ if (orderForm) {
               let cart = JSON.parse(localStorage.getItem("cart"));
               cart = cart.filter(item => item.checked == false);
               localStorage.setItem("cart",JSON.stringify(cart));
-              //chuyển hướng sang trang đặt hàng thành công
-              window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`;
+               switch (method) {
+                case "money":s
+                case "bank":
+                    //chuyển hướng sang trang đặt hàng thành công
+                    window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`;
+                    break;
+                case "zalopay":
+                  // Chuyển hướng sang trang thanh toán bằng ZaloPay
+                  window.location.href = `/order/payment-zalopay?orderId=${data.orderId}`;
+                  break;
+              }
+
             }
           })
 
