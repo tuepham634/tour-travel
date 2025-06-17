@@ -121,7 +121,7 @@ module.exports.list = async (req, res) => {
     item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY");
   }
 
-  res.render("Admin/pages/tour-list", {
+  res.render("admin/pages/tour-list", {
     pageTitle: "Quản lý tour",
     tourList: tourList,
     accountAdminList: accountAdminList,
@@ -137,7 +137,7 @@ module.exports.create = async (req, res) => {
   });
   const categoryTree = categoryHelper.buildCategoryTree(categoryList);
   const cityList = await City.find({});
-  res.render("Admin/pages/tour-create", {
+  res.render("admin/pages/tour-create", {
     pageTitle: "Tạo tour",
     categoryList: categoryTree,
     cityList: cityList,
@@ -249,7 +249,7 @@ module.exports.edit = async (req, res) => {
       const categoryTree = categoryHelper.buildCategoryTree(categoryList);
       const cityList = await City.find({});
 
-      res.render("Admin/pages/tour-edit", {
+      res.render("admin/pages/tour-edit", {
         pageTitle: "Chỉnh sửa tour",
         categoryList: categoryTree,
         cityList: cityList,
@@ -428,7 +428,7 @@ module.exports.trash = async (req, res) => {
     item.deletedAtFormat = moment(item.deletedAt).format("HH:MM - DD/MM/YYYY");
   }
 
-  res.render("Admin/pages/tour-trash", {
+  res.render("admin/pages/tour-trash", {
     pageTitle: "Thùng rác tour",
     tourList: tourList,
   });

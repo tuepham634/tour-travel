@@ -60,7 +60,7 @@ module.exports.dashboard = async (req, res) => {
       );
     }
   // console.log(orderListNew);
-  res.render("Admin/pages/dashboard", {
+  res.render("admin/pages/dashboard", {
     pageTitle: "Tổng Quan",
     overview: overview,
     orderListNew:orderListNew

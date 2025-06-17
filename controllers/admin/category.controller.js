@@ -96,7 +96,7 @@ const skip = (page - 1) * limitPages;
   // Hết Danh sách tài khoản quản trị
 
 
-  res.render("Admin/pages/category-list",{
+  res.render("admin/pages/category-list",{
     pageTitle:"Quản Lý Danh Mục",
     categoryList: categoryList,
     accountAdminList: accountAdminList,
@@ -108,7 +108,7 @@ module.exports.create = async (req, res) => {
     deleted: false
   })
   const categoryTree = categoryHelper.buildCategoryTree(categoryList);
-  res.render("Admin/pages/category-create",{
+  res.render("admin/pages/category-create",{
     pageTitle:"Tạo Danh Mục",
     categoryList : categoryTree
   })
@@ -150,7 +150,7 @@ module.exports.edit = async (req,res) => {
       deleted:false
     });
 
-    res.render(`Admin/pages/category-edit`,{
+    res.render(`admin/pages/category-edit`,{
       pageTitle:"Sửa Danh Mục",
       categoryList :categoryTree,
       categoryDetail:categoryDetail

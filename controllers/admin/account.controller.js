@@ -5,7 +5,7 @@ const ForgotPassword = require("../../models/forgot-password.model");
 const generateHelper = require("../../helpers/generate.helper");
 const mailHelper = require("../../helpers/mail.helper");
 module.exports.login = (req, res) => {
-    res.render("Admin/pages/login",{
+    res.render("admin/pages/login",{
       pageTitle:"Đăng Nhập"
     })
   }
@@ -65,7 +65,7 @@ module.exports.loginPost = async(req, res) => {
 
 }
 module.exports.register = (req, res) => {
-    res.render("Admin/pages/register",{
+    res.render("admin/pages/register",{
       pageTitle:"Đăng Ký"
     })
 }
@@ -99,12 +99,12 @@ module.exports.registerPost = async(req, res) => {
   })
 }
 module.exports.registerInitial = (req, res) => {
-  res.render("Admin/pages/register-initial",{
+  res.render("admin/pages/register-initial",{
     pageTitle:"Đăng Ký"
   })
 }
 module.exports.forgotPassword = (req, res) => {
-  res.render("Admin/pages/forgot-password",{
+  res.render("admin/pages/forgot-password",{
     pageTitle:"Quên Mật Khẩu"
   })
 }
@@ -153,7 +153,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
   })
 }
 module.exports.otpPassword = (req, res) => {
-  res.render("Admin/pages/otp-password",{
+  res.render("admin/pages/otp-password",{
     pageTitle:"Nhập Mã OTP"
   })
 }
@@ -198,7 +198,7 @@ module.exports.otpPasswordPost = async (req, res) => {
   })
 }
 module.exports.resetPassword = (req, res) => {
-  res.render("Admin/pages/reset-password",{
+  res.render("admin/pages/reset-password",{
     pageTitle:"Đổi Mật Khẩu"
   })
 }
