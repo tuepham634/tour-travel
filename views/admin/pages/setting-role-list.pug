@@ -27,8 +27,6 @@ block main
         table
           thead
             tr
-              th(class="inner-center")
-                input(type="checkbox" class="inner-check")
               th Tên nhóm quyền
               th Mô tả ngắn
               if (permissions.includes("rolelist-edit"))
@@ -36,22 +34,21 @@ block main
           tbody
             each item in roleList
               tr
-                td(class="inner-center")
-                  input(type="checkbox" class="inner-check")
                 td #{item.name}
                 td #{item.description}
                 td
-                  if (permissions.includes("rolelist-edit"))
+                 
                     .inner-buttons
-                      a(
-                        href=`/${pathAdmin}/setting/role/edit/${item.id}`
-                        class="inner-edit"
-                      ) <i class="fa-regular fa-pen-to-square"></i>
-                  if (permissions.includes("rolelist-delete"))
-                      button(
-                        class="inner-delete"
-                        button-delete
-                        data-api=`/${pathAdmin}/setting/role/delete/${item.id}`
-                      ) <i class="fa-regular fa-trash-can"></i>
+                      if (permissions.includes("rolelist-edit"))
+                        a(
+                          href=`/${pathAdmin}/setting/role/edit/${item.id}`
+                          class="inner-edit"
+                        ) <i class="fa-regular fa-pen-to-square"></i>
+                      if (permissions.includes("rolelist-delete"))
+                          button(
+                            class="inner-delete"
+                            button-delete
+                            data-api=`/${pathAdmin}/setting/role/delete/${item.id}`
+                          ) <i class="fa-regular fa-trash-can"></i>
 
     //- End Section 6

@@ -33,6 +33,7 @@ router.patch(
     upload.single('avatar'), 
     settingController.accountAdminEditPatch
 )
+router.patch('/account-admin/change-multi', settingController.changeMultiAccountAdminPatch);
 
 router.get('/role/list', settingController.roleList)
 

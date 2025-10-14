@@ -405,11 +405,50 @@ module.exports.ChangeMultiPatch = async (req, res) => {
   }
 }
 module.exports.trash = async (req, res) => {
-  const tourList = await Tour.find({
+   const find = {
     deleted: true,
-  }).sort({
-    deletedAt: "desc",
-  });
+  };
+ 
+  //phân trang
+
+ const limitPages = 3;
+  let page = parseInt(req.query.page) || 1;
+
+  if (isNaN(page) || page < 1) {
+    page = 1;
+  }
+
+  const totalRecord = await Tour.countDocuments(find);
+  const totalPages = Math.ceil(totalRecord / limitPages);
+
+  // Nếu totalPages = 0, giữ page = 1 để skip không bị âm
+  if (page > totalPages && totalPages > 0) {
+    page = totalPages;
+  }
+
+  const skip = (page - 1) * limitPages;
+    const pagination = {
+      skip:skip,
+      totalPages:totalPages,
+      totalRecord:totalRecord
+    }
+  //hết phân trang
+    // Tìm kiếm
+  if(req.query.keyword) {
+    const keyword = slugify(req.query.keyword, {
+      lower: true
+    });
+    const keywordRegex = new RegExp(keyword);
+    find.slug = keywordRegex;
+  }
+  // Hết Tìm kiếm
+
+
+  const tourList = await Tour.find(find).sort({
+    position: "asc",
+  }).limit(limitPages)
+  .skip(skip);
+  
   for (const item of tourList) {
     if (item.createBy) {
       const infoAccountCreated = await AccountAdmin.findOne({
@@ -417,26 +456,27 @@ module.exports.trash = async (req, res) => {
       });
       item.createdByFullName = infoAccountCreated.fullName;
     }
-    if (item.deletedBy) {
-      const infoAccountDeleted = await AccountAdmin.findOne({
-        _id: item.deletedBy,
+    if (item.updateBy) {
+      const infoAccountUpdated = await AccountAdmin.findOne({
+        _id: item.updateBy,
       });
-      item.deletedByFullName = infoAccountDeleted.fullName;
+      item.updatedByFullName = infoAccountUpdated.fullName;
     }
-
-    item.createdAtFormat = moment(item.createdAt).format("HH:MM - DD/MM/YYYY");
-    item.deletedAtFormat = moment(item.deletedAt).format("HH:MM - DD/MM/YYYY");
+    item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY");
+    item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY");
   }
 
   res.render("admin/pages/tour-trash", {
-    pageTitle: "Thùng rác tour",
+    pageTitle: "Quản lý tour",
     tourList: tourList,
+    pagination:pagination
+
   });
 };
 module.exports.undoPatch = async (req, res) => {
   if (!req.permissions.includes("tour-trash")) {
     res.json({
-      code: " error ",
+      code: "error",
       message: "Không có quyền sử dụng tính năng này!",
     });
     return;
@@ -451,7 +491,7 @@ module.exports.undoPatch = async (req, res) => {
         deleted: false,
       }
     );
-    req.flash("succes", "Khôi phục thành công");
+    req.flash("success", "Khôi phục thành công");
     res.json({
       code: "success",
     });
@@ -465,7 +505,7 @@ module.exports.undoPatch = async (req, res) => {
 module.exports.deleteDestroyPatch = async (req, res) => {
   if (!req.permissions.includes("tour-trash")) {
     res.json({
-      code: " error ",
+      code: "error",
       message: "Không có quyền sử dụng tính năng này!",
     });
     return;

@@ -6,36 +6,113 @@ const  CryptoJS  =  require ('crypto-js');
 const moment = require("moment");
 
 module.exports.list = async (req, res) => {
-  const find = {
-    deleted: false,
-  };
-  const orderList = await Order.find(find).sort({
-    createdAt: "desc",
-  });
 
-  for (const orderDetail of orderList) {
-    orderDetail.paymentMethodName = variableConfig.paymentMethod.find(
-      (item) => item.value == orderDetail.paymentMethod
-    ).label;
+    const find = {
+        deleted: false
+    };
 
-    orderDetail.paymentStatusName = variableConfig.paymentStatus.find(
-      (item) => item.value == orderDetail.paymentStatus
-    ).label;
+    //Status order
+    if (req.query.statusOrder) {
+        find.status = req.query.statusOrder
+    }
 
-    orderDetail.statusName = variableConfig.orderStatus.find(
-      (item) => item.value == orderDetail.status
-    ).label;
+    //Payment Method
+    if (req.query.namePayment) {
+        find.paymentMethod = req.query.namePayment
+    }
 
-    orderDetail.createdAtTime = moment(orderDetail.createdAt).format("HH:mm");
-    orderDetail.createdAtDate = moment(orderDetail.createdAt).format(
-      "DD/MM/YYYY"
-    );
-  }
-  res.render("admin/pages/order-list", {
-    pageTitle: "Quản lý đơn hàng",
-    orderList: orderList,
-  });
-};
+    //Status Payment
+    if (req.query.statusPayment) {
+        find.paymentStatus = req.query.statusPayment
+    }
+
+    //Filter Date
+    const FilterDate = {}
+
+    //dateStart
+    if (req.query.dateStart) {
+        const startDate = moment(req.query.dateStart).startOf("date").toDate();
+        FilterDate.$gte = startDate;
+
+    }
+    //dateEnd
+    if (req.query.dateEnd) {
+        const endDate = moment(req.query.dateEnd).endOf("date").toDate();
+        FilterDate.$lte = endDate;
+    }
+    //object.keys(FilterDate) : trả về 1 mảng key
+
+    if (Object.keys(FilterDate).length > 0) {
+        find.createdAt = FilterDate;
+    }
+
+    // Tìm kiếm không theo slug
+    if (req.query.keyword) {
+
+        const keyword = req.query.keyword;
+        const keywordRegex = new RegExp(keyword, "i"); // i = không phân biệt hoa thường
+
+        console.log("name", keywordRegex)
+        find.$or = [
+            { orderCode: keywordRegex },
+            { fullName: keywordRegex },
+            { phone: keywordRegex },
+            { "items.name": keywordRegex }
+        ];
+
+    }
+
+    // Phân trang
+    const limit = 6;
+
+    let page = 1
+
+    if (req.query.page) {
+        const pageCurrent = parseInt(req.query.page);
+        if (pageCurrent > 0) {
+            page = pageCurrent
+        }
+    }
+
+    const skip = (page - 1) * limit
+
+    const totalOrder = await Order.find({
+        deleted: false
+    })
+
+    const totalPage = Math.ceil(totalOrder.length / limit)
+
+    const pagination = {
+        skip: skip,
+        totalOrder: totalOrder,
+        totalPage: totalPage
+    }
+    const orderList = await Order
+        .find(find)
+        .sort({
+            createdAt: "desc"
+        })
+        .limit(limit)
+        .skip(skip)
+
+    for (const orderDetail of orderList) {
+        orderDetail.paymentMethodName = variableConfig.paymentMethod.find(item => item.value == orderDetail.paymentMethod).label;
+        orderDetail.paymentStatusName = variableConfig.paymentStatus.find(item => item.value == orderDetail.paymentStatus).label;
+        orderDetail.statusName = variableConfig.orderStatus.find(item => item.value == orderDetail.status).label;
+
+        // Chuyển về time hiện tại từ mongoose
+        orderDetail.createdAtTime = moment(orderDetail.createdAt).format("HH:mm");
+        orderDetail.createdAtDate = moment(orderDetail.createdAt).format("DD/MM/YYYY");
+
+    }
+
+    res.render('admin/pages/order-list', {
+        pageTitle: "Danh sách order",
+        orderList: orderList,
+        pagination: pagination
+
+    })
+}
 
 module.exports.edit = async (req, res) => {
   const id = req.params.id;
@@ -100,6 +177,39 @@ module.exports.editPatch = async (req, res) => {
     });
   }
 };
+module.exports.deletePatch = async (req, res) => {
+
+    if (!req.permissions.includes("order-delete")) {
+        res.json({
+            code: "error",
+            message: "Không có quyền sử dụng tính năng này!"
+        })
+        return;
+    }
+
+
+    try {
+        const id = req.params.id
+        // deleted Model
+
+        await Order.updateOne({
+            _id: id
+        }, {
+            deleted: true,
+            deletedBy: req.account.id,
+            deletedAt: Date.now()
+
+        })
+
+        req.flash("success", "Xóa tour thành công!");
+
+        res.json({
+            code: "success"
+        })
+    } catch (error) {
+        req.flash("error", "Xóa tour thất bại!");
+    }
+}
 module.exports.paymentZaloPay = async (req, res) => {
   try {
     const orderId = req.query.orderId;

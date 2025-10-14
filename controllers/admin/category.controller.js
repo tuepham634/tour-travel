@@ -213,7 +213,92 @@ module.exports.deletePatch = async (req,res) => {
       message:"Id không hợp lệ!!!"
     })
  }
-} 
+}
+module.exports.trash = async (req,res) => {
+const find ={
+    deleted: true
+  }
+
+  //Lọc theo ngày
+  const dataFilter = {}
+  if(req.query.startDate){
+    const startDate = moment(req.query.startDate).startOf("Date").toDate();
+    dataFilter.$gte = startDate
+  }
+  if(req.query.endDate){
+    const endDate = moment(req.query.endDate).endOf("Date").toDate();
+    dataFilter.$lte = endDate;
+  }
+  if(Object.keys(dataFilter).length >0){
+    find.createdAt = dataFilter
+  }
+  //Hết Lọc theo ngày
+  //Tìm kiếm
+  if(req.query.keyword){
+    const keyword = slugify(req.query.keyword,{
+      lower:true
+    })
+    const keywordRegex = new RegExp(keyword);
+    find.slug = keywordRegex;
+    console.log(keywordRegex);
+  }
+  //hết Tìm kiếm
+  //phân trang
+  //hết phân trang
+ const limitPages = 3;
+let page = parseInt(req.query.page) || 1;
+
+if (isNaN(page) || page < 1) {
+  page = 1;
+}
+
+const totalRecord = await Category.countDocuments(find);
+const totalPages = Math.ceil(totalRecord / limitPages);
+
+// Nếu totalPages = 0, giữ page = 1 để skip không bị âm
+if (page > totalPages && totalPages > 0) {
+  page = totalPages;
+}
+
+const skip = (page - 1) * limitPages;
+    const pagination = {
+      skip:skip,
+      totalPages:totalPages,
+      totalRecord:totalRecord
+    }
+  const categoryList = await Category.find(
+    find
+  ).sort({
+    position: "desc"
+  })
+  .limit(limitPages)
+  .skip(skip);
+
+  for(const item of categoryList){
+    if(item.createBy){
+      const infoAccountCreated = await AccountAdmin.findOne({
+        _id: item.createBy
+      })
+      item.createdByFullName = infoAccountCreated.fullName;
+    }
+
+    if(item.updateBy){
+      const infoAccountUpdated = await AccountAdmin.findOne({
+        _id: item.updateBy
+      })
+      item.updatedByFullName = infoAccountUpdated.fullName
+    }
+    item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY");
+    item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY");
+  }
+
+
+  res.render("admin/pages/category-trash",{
+    pageTitle:"Quản Lý Danh Mục",
+    categoryList: categoryList,
+    pagination:pagination
+  })
+}
 module.exports.changeMultiPatch = async (req,res) => {
   try {
     const {option, ids} = req.body;
@@ -248,4 +333,117 @@ module.exports.changeMultiPatch = async (req,res) => {
     })
   }
   
+}
+
+
+
+module.exports.undoPatch = async (req, res) => {
+  // if (!req.permissions.includes("category-trash")) {
+  //   req.flash("error", "Bạn không có quyền khôi phục danh mục!");
+  //   res.json({
+  //     code: "error",
+  //     message: "Bạn không có quyền khôi phục danh mục!"
+  //   })
+  //   return;
+  // }
+  try {
+    const id = req.params.id;
+
+    await Category.updateOne({
+      _id: id,
+      deleted: true
+    }, {
+      deleted: false,
+    })
+
+    req.flash("success", "Khôi phục danh mục thành công!")
+    res.json({
+      code: "success",
+    })
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Id không hợp lệ!"
+    })
+  }
+}
+
+module.exports.deleteDestroy = async (req, res) => {
+  // if (!req.permissions.includes("category-trash")) {
+  //   req.flash("error", "Bạn không có quyền xóa vĩnh viễn danh mục!");
+  //   res.json({
+  //     code: "error",
+  //     message: "Bạn không có quyền xóa vĩnh viễn danh mục!"
+  //   })
+  //   return;
+  // }
+  try {
+    const id = req.params.id;
+
+    await Category.deleteOne({
+      _id: id,
+      deleted: true
+    })
+
+    req.flash("success", "Xóa vĩnh viễn danh mục thành công!")
+    res.json({
+      code: "success",
+    })
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Id không hợp lệ!"
+    })
+  }
+}
+
+module.exports.trashChangeMultiPatch = async (req, res) => {
+  try {
+    const { option, ids } = req.body;
+
+    switch (option) {
+      case "undo":
+        // if (!req.permissions.includes("category-trash")) {
+        //   req.flash("error", "Bạn không có quyền khôi phục danh mục!");
+        //   res.json({
+        //     code: "error",
+        //     message: "Bạn không có quyền khôi phục danh mục!"
+        //   })
+        //   return;
+        // }
+        await Category.updateMany({
+          _id: { $in: ids },
+          deleted: true
+        }, {
+          deleted: false,
+        });
+        req.flash("success", "Khôi phục thành công!");
+        break;
+      case "destroy-delete":
+        // if (!req.permissions.includes("category-trash")) {
+        //   req.flash("error", "Bạn không có quyền xóa vĩnh viễn danh mục!");
+        //   res.json({
+        //     code: "error",
+        //     message: "Bạn không có quyền xóa vĩnh viễn danh mục!"
+        //   })
+        //   return;
+        // }
+        await Category.deleteMany({
+          _id: { $in: ids },
+          deleted: true
+        });
+        req.flash("success", "Xóa vĩnh viễn thành công!");
+        break;
+    }
+
+    res.json({
+      code: "success"
+    })
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Id không tồn tại trong hệ thống!"
+    })
+  }
 }

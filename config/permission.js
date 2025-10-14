@@ -1,8 +1,10 @@
 module.exports.permissionList = [
+  //dashboard
   {
     label: "Xem trang Tổng quan",
     value: "dashboard-view"
   },
+  //category
   {
     label: "Xem danh mục",
     value: "category-view"
@@ -19,10 +21,11 @@ module.exports.permissionList = [
     label: "Xóa danh mục",
     value: "category-delete"
   },
-    {
+  {
     label :  "Thùng rác danh mục" ,
     value :  "category-trash"
   },
+  //tour
   {
     label :  "Xem tour" ,
     value :  "tour-view"
@@ -32,7 +35,7 @@ module.exports.permissionList = [
     value :  "tour-create"
   },
   {
-    label :  "Sua tour" ,
+    label :  "Sửa tour" ,
     value :  "tour-edit"
   },
   {
@@ -43,6 +46,7 @@ module.exports.permissionList = [
     label :  "Thùng rác tour",
     value :  "tour-trash"
   },
+  //order
   {
     label :  "Xem đơn hang" ,
     value :  "order-view"
@@ -59,6 +63,7 @@ module.exports.permissionList = [
     label :  "Thùng rác đơn hàng" ,
     value :  "order-trash"
   },
+  //setting
   {
     label :  "Cài đặt chung" ,
     value :  "setting-view"
@@ -99,4 +104,13 @@ module.exports.permissionList = [
     label :  "Xóa nhóm quyền" ,
     value :  "rolelist-delete"
   },
+  //contact
+  {
+    label: "Thông tin liên hệ",
+    value: "contact-view"
+  },
+  {
+    label: "Xóa liên hệ",
+    value: "contact-delete"
+  }
 ]

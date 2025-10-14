@@ -292,7 +292,6 @@ if (categoryCreateForm) {
             alert(data.message);
           }
           if (data.code == "success") {
-            alert(data.message);
             window.location.href = `/${pathAdmin}/category/list`;
           }
         });
@@ -1297,6 +1296,31 @@ if (listButtonDelete.length > 0) {
 }
 
 // End Button Delete
+// Delete soft  
+const deleteDestroyList = document.querySelectorAll("[button-delete-destroy]")
+
+if (deleteDestroyList.length > 0) {
+  deleteDestroyList.forEach((button) => {
+    button.addEventListener("click", () => {
+      const api = button.getAttribute("data-api")
+
+      console.log(api)
+
+      fetch(api, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code == "error") {
+            alert(data.message)
+          }
+          if (data.code == "success") {
+            window.location.reload()
+          }
+        })
+    })
+  })
+}
 // filter status
 const filterStatus = document.querySelector("[filter-status]");
 if (filterStatus) {
@@ -1318,6 +1342,91 @@ if (filterStatus) {
   }
 }
 // end filter status
+// Filter Status Order
+const filterStatusOrder = document.querySelector("[filter-status-order]")
+
+if (filterStatusOrder) {
+  const url = new URL(window.location.href);
+  filterStatusOrder.addEventListener("change", () => {
+    const value = filterStatusOrder.value
+    if (value) {
+      url.searchParams.set("statusOrder", value)
+    } else {
+      url.searchParams.delete("statusOrder")
+    }
+    window.location.href = url.href
+  })
+  const valueCurrent = url.searchParams.get("statusOrder")
+  if (valueCurrent)
+    filterStatusOrder.value = valueCurrent
+}
+
+// End
+
+// Filter - PaymentMethod
+const filterPayment = document.querySelector("[filter-paymentMethod]")
+if (filterPayment) {
+  const url = new URL(window.location.href);
+  filterPayment.addEventListener("change", () => {
+    const value = filterPayment.value;
+    if (value) {
+      url.searchParams.set("namePayment", value);
+    } else {
+      url.searchParams.delete("namePayment")
+    }
+    window.location.href = url.href
+  })
+  const valueCurrent = url.searchParams.get("namePayment")
+  if (valueCurrent)
+    filterPayment.value = valueCurrent
+}
+// End
+
+// Filter Status Payment
+const filterStatusPayment = document.querySelector("[filter-status-payment]");
+if (filterStatusPayment) {
+  const url = new URL(window.location.href);
+  filterStatusPayment.addEventListener("change", () => {
+    const value = filterStatusPayment.value;
+    if (value) {
+      url.searchParams.set("statusPayment", value);
+    } else {
+      url.searchParams.delete("statusPayment")
+    }
+    window.location.href = url.href
+  })
+  const valueCurrent = url.searchParams.get("statusPayment")
+  if (valueCurrent)
+    filterStatusPayment.value = valueCurrent
+}
+// End
+
+
+// Filter name
+const filterName = document.querySelector("[filter-name]")
+
+if (filterName) {
+  const url = new URL(window.location.href)
+  filterName.addEventListener("change", () => {
+    const value = filterName.value
+    if (value) {
+      url.searchParams.set("name", value)
+    } else {
+      url.searchParams.delete("name")
+    }
+    window.location.href = url.href
+  })
+  // hiển thị mặc định
+  const valueCurrent = url.searchParams.get("name")
+  if (valueCurrent) {
+    filterName.value = valueCurrent
+  }
+  console.log(filterName.value)
+  console.log("-------")
+  console.log(valueCurrent)
+
+}
+//end
 // Filter Created By
 const filterCreatedBy = document.querySelector("[filter-created-by]");
 if (filterCreatedBy) {
@@ -1426,6 +1535,30 @@ if (filterPrice) {
   }
 }
 //filter-price
+// Filter Role
+const filterRole = document.querySelector("[filter-role]");
+if (filterRole) {
+  const url = new URL(window.location.href);
+
+  // Lắng nghe thay đổi lựa chọn
+  filterRole.addEventListener("change", () => {
+    const value = filterRole.value;
+    if (value) {
+      url.searchParams.set("role", value);
+    } else {
+      url.searchParams.delete("role");
+    }
+
+    window.location.href = url.href;
+  })
+
+  // Hiển thị lựa chọn mặc định
+  const valueCurrent = url.searchParams.get("role");
+  if (valueCurrent) {
+    filterRole.value = valueCurrent;
+  }
+}
+// End Filter Role
 
 // Filter reset
 const filterReset = document.querySelector("[filter-reset]");

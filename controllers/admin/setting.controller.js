@@ -49,26 +49,99 @@ module.exports.websiteInfoPatch = async (req, res) => {
   });
 };
 module.exports.accountAdminList = async (req, res) => {
-  const accountAdminList = await AccountAdmin.find({
+  const find = {
     deleted: false,
-  }).sort({
-    createdAt: "desc",
+  };
+  //Nhóm quyền
+  const listRole = await Role.find({
+    deleted: false,
   });
-  for (const item of accountAdminList) {
-    if (item.role) {
-      const roleInfo = await Role.findOne({
-        _id: item.role,
-      });
+  //Lọc theo trạng thái
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+  //Lọc theo quyền
+  if (req.query.role) {
+    find.role = req.query.role;
+  }
 
-      if (roleInfo) {
-        item.roleName = roleInfo.name;
-      }
+  // Lọc theo ngày tạo
+  const dateFilter = {};
+  if (req.query.dateStart) {
+    const startDate = moment(req.query.dateStart).startOf("date").toDate();
+    dateFilter.$gte = startDate;
+  }
+  if (req.query.dateStart) {
+    const endDate = moment(req.query.dateEnd).endOf("date").toDate();
+    dateFilter.$lte = endDate;
+  }
+  if (Object.keys(dateFilter).length > 0) {
+    find.createdAt = dateFilter;
+  }
+
+  //Tìm kiếm
+  if (req.query.keyword) {
+    const keyword = req.query.keyword;
+    const keywordRegex = new RegExp(keyword, "i"); // i = không phân biệt hoa thường
+
+    console.log("name", keywordRegex);
+    find.$or = [
+      { fullName: keywordRegex },
+      { phone: keywordRegex },
+      { "items.name": keywordRegex },
+    ];
+  }
+
+  // Phân trang
+  const limitItems = 3;
+  let page = 1;
+  if (req.query.page) {
+    const currentPage = parseInt(req.query.page);
+    if (currentPage > 0) {
+      page = currentPage;
     }
   }
 
+  const totalRecord = await AccountAdmin.countDocuments(find);
+  const totalPage = Math.ceil(totalRecord / limitItems);
+
+  // Xử lý trường hợp không có bản ghi
+  if (totalRecord === 0) {
+    page = 1; // Đặt page về 1
+  } else if (page > totalPage) {
+    page = totalPage;
+  }
+
+  const skip = (page - 1) * limitItems;
+  const pagination = {
+    skip: skip,
+    totalRecord: totalRecord,
+    totalPage: totalPage,
+  };
+  const accountAdminList = await AccountAdmin.find(find)
+    .sort({
+      createdAt: "desc",
+    })
+    .limit(limitItems)
+    .skip(skip);
+
+  for (const item of accountAdminList) {
+    if (item.role) {
+      const roleInf = await Role.findOne({
+        _id: item.role,
+      });
+
+      if (roleInf) {
+        item.nameRole = roleInf.name;
+      }
+    }
+  }
+  console.log(accountAdminList);
   res.render("admin/pages/setting-account-admin-list", {
     pageTitle: "Tài khoản quản trị",
     accountAdminList: accountAdminList,
+    listRole: listRole,
+    pagination: pagination,
   });
 };
 
@@ -178,6 +251,49 @@ module.exports.accountAdminEditPatch = async (req, res) => {
     });
   } catch (error) {
     res.redirect(`/${pathAdmin}/setting/account-admin/list`);
+  }
+};
+module.exports.changeMultiAccountAdminPatch = async (req, res) => {
+  try {
+    const { option, ids } = req.body;
+    switch (option) {
+      case "initial":
+      case "active":
+      case "inactive":
+        await AccountAdmin.updateMany(
+          {
+            _id: { $in: ids },
+          },
+          {
+            status: option,
+          }
+        );
+        req.flash("success", "Đổi trạng thái thành công !");
+        break;
+      case "delete":
+        await AccountAdmin.updateMany(
+          {
+            _id: { $in: ids },
+          },
+          {
+            deleted: true,
+            deletedBy: req.account.id,
+            deletedAt: Date.now(),
+          }
+        );
+        req.flash("success", "Xóa tài khoản quản trị thành công !");
+        break;
+      default:
+        break;
+    }
+    res.json({
+      code: "success",
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Id không tồn tại trong hệ thống !",
+    });
   }
 };
 module.exports.roleList = async (req, res) => {

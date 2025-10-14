@@ -20,6 +20,10 @@ router.patch(
     categoryValidate.createPost,
     categoryController.editPatch
 )
+router.get('/trash',categoryController.trash);
+router.patch('/undo/:id', categoryController.undoPatch)
+router.delete('/delete-destroy/:id', categoryController.deleteDestroy)
 router.patch('/delete/:id',categoryController.deletePatch);
 router.patch('/change-multi',categoryController.changeMultiPatch);
+router.patch('/trash/change-multi', categoryController.trashChangeMultiPatch)
 module.exports = router;
