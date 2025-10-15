@@ -8,11 +8,11 @@
 
 
  Trang admin : 
- ![alt text](/tour-travel/public/assets/images/image.png)
+ ![alt text](/Project-1/public/assets/images/image.png)
  Trang đăng nhập :
- ![alt text](/tour-travel/public/assets/images/dang-nhap.png)
+ ![alt text](/Project-1/public/assets/images/dang-nhap.png)
  Trang chủ
- ![alt text](/tour-travel/public/assets/images/trangchu.png)
+ ![alt text](/Project-1/public/assets/images/trangchu.png)
 
 ## Cài đặt & Chạy chương trình
 
