@@ -8,11 +8,11 @@
 
 
  Trang admin : 
- ![alt text](/Project-1/public/assets/images/image.png)
+ ![alt text](public/assets/images/image.png)
  Trang đăng nhập :
- ![alt text](/Project-1/public/assets/images/dang-nhap.png)
+ ![alt text](public/assets/images/dang-nhap.png)
  Trang chủ
- ![alt text](/Project-1/public/assets/images/trangchu.png)
+ ![alt text](public/assets/images/trangchu.png)
 
 ## Cài đặt & Chạy chương trình
 
