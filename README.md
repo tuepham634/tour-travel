@@ -1,18 +1,18 @@
 #  Website_TourTravel
 
 ##  Giới thiệu
-**Website_Tourism** là dự án web quản lý và đặt tour du lịch trực tuyến, được xây dựng bằng **Node.js**, **Express**, **Mongoose**,  **Pug**  và triển khai ứng dụng trên Vercel
+**Website_Tourism** là dự án web quản lý và đặt tour du lịch trực tuyến, được xây dựng bằng **Node.js**, **Express**, **Mongoose**,  **Pug**  và triển khai ứng dụng trên Render
 Ứng dụng cho phép người dùng xem tour, đặt tour, thanh toán trực tuyến qua **ZaloPay** hoặc **VNPay**, đồng thời hỗ trợ quản trị viên quản lý dữ liệu tour, khách hàng và thanh toán.
 
  **Demo:** https://tourtravel-fau1.onrender.com/
 
 
  Trang admin : 
- ![alt text](/Project-1/public/assets/images/image.png)
+ ![alt text](/tour-travel/public/assets/images/image.png)
  Trang đăng nhập :
- ![alt text](/Project-1/public/assets/images/dang-nhap.png)
+ ![alt text](/tour-travel/public/assets/images/dang-nhap.png)
  Trang chủ
- ![alt text](/Project-1/public/assets/images/trangchu.png)
+ ![alt text](/tour-travel/public/assets/images/trangchu.png)
 
 ## Cài đặt & Chạy chương trình
 
